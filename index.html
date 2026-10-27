@@ -245,6 +245,7 @@ details[open] > summary::after { content: "−"; }
 .chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
 .chk span { min-width: 0; }
 .chk input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.lnk { color: var(--accent); font-weight: 600; white-space: nowrap; }
 code { font-family: var(--font-mono); font-size: 0.85em; background: var(--surface); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
 .fig { margin: 0; display: grid; gap: 6px; min-width: 0; }
 @media (max-width: 899px) { .fig { order: -1; } }
@@ -699,7 +700,7 @@ code { font-family: var(--font-mono); font-size: 0.85em; background: var(--surfa
     var s1 = { id: 's1', title: 'Conoce tu radio', items: [
       { id: 's1-ajustes', html: 'Abre <strong>Ajustes &gt; Acerca del dispositivo</strong> y anota la versión de Android, el modelo y el número de compilación.' },
       { id: 's1-cpuz', html: 'Instala <strong>CPU-Z</strong> o <strong>Device Info HW</strong> y anota procesador, núcleos, RAM real y almacenamiento libre.' },
-      { id: 's1-form', html: 'Completa el formulario con esos datos: la guía se ajusta sola.' }
+      { id: 's1-form', html: 'Completa el formulario con esos datos: la guía se ajusta sola. <a class="lnk" href="#radio">Ir al formulario ↑</a>' }
     ] };
     var falta = [];
     if (p.cores === '?') falta.push('núcleos');
