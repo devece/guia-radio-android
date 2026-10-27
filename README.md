@@ -10,3 +10,7 @@ Guía interactiva para mejorar la interfaz de radios Android 2 DIN. Se ingresan 
 ## Despliegue
 
 Proyecto Vercel `guia-radio-android` (sin framework, sin build).
+
+## Publicación automática
+
+Cada cambio en `main` se publica solo en Vercel.
