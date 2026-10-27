@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Guía Radio Android</title>
+<meta name="description" content="Ingresa las características de tu radio Android y la guía para mejorar su interfaz se ajusta sola.">
+<meta property="og:title" content="Guía Radio Android">
+<meta property="og:description" content="Ingresa las características de tu radio Android y la guía para mejorar su interfaz se ajusta sola.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CL">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Concepto: tablero de instrumentos. Formulario fijo a la izquierda, diagnóstico con medidor de holgura arriba y pasos plegables abajo. */
+:root {
+  --bg: #E9EDEA;
+  --surface: #F6F8F6;
+  --raised: #FFFFFF;
+  --fg: #13191B;
+  --muted: #465255;
+  --line: #C6CFCB;
+  --accent: #974A00;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #F2E0CB;
+  --warn: #6E5600;
+  --warn-soft: #F0E7B6;
+  --good: #1B6B3F;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1315;
+    --surface: #151B1E;
+    --raised: #1B2327;
+    --fg: #E7EDEA;
+    --muted: #9AA7A6;
+    --line: #2B363A;
+    --accent: #FFB02E;
+    --accent-ink: #1A1100;
+    --accent-soft: #3A2A0E;
+    --warn: #E8CC5A;
+    --warn-soft: #352E0E;
+    --good: #5ED39A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1315;
+  --surface: #151B1E;
+  --raised: #1B2327;
+  --fg: #E7EDEA;
+  --muted: #9AA7A6;
+  --line: #2B363A;
+  --accent: #FFB02E;
+  --accent-ink: #1A1100;
+  --accent-soft: #3A2A0E;
+  --warn: #E8CC5A;
+  --warn-soft: #352E0E;
+  --good: #5ED39A;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.55 var(--font-body);
+  padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 28px 56px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); letter-spacing: 0.01em; }
+h2 { font-size: 1.6rem; }
+p { margin: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.lede { color: var(--muted); max-width: 62ch; margin-top: 10px; }
+.layout { display: grid; grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
+@media (min-width: 960px) {
+  .layout { grid-template-columns: 340px minmax(0, 1fr); gap: 36px; align-items: start; }
+  .panel { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); max-height: calc(100vh - 32px); overflow: auto; }
+}
+.panel { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-width: 0; }
+.panel .hint { color: var(--muted); font-size: 0.875rem; margin: 8px 0 16px; }
+.field { display: grid; gap: 4px; margin-bottom: 14px; }
+.field label { font-weight: 600; font-size: 0.9rem; }
+.field small { color: var(--muted); font-size: 0.8rem; }
+select, input[type="text"], textarea {
+  width: 100%; min-height: 44px; padding: 9px 12px; font: inherit; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+}
+select:focus-visible, input:focus-visible, textarea:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+.group-title { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 18px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.btn {
+  font: inherit; font-weight: 600; min-height: 44px; padding: 8px 16px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover { filter: brightness(1.06); }
+main { min-width: 0; display: grid; gap: 28px; }
+.diag { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 18px; }
+.diag-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+.diag-head .model { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); overflow-wrap: anywhere; }
+.gauge { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.seg { height: 16px; border-radius: 3px; border: 1px solid var(--line); background: transparent; }
+.seg.on { background: var(--accent); border-color: var(--accent); }
+.gauge-labels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.gauge-labels .cur { color: var(--fg); font-weight: 500; }
+.verdict { font-family: var(--font-display); font-size: 2rem; font-weight: 700; line-height: 1; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 0; }
+.stats div { border-top: 1px solid var(--line); padding-top: 8px; min-width: 0; }
+.stats dt { font-size: 0.75rem; color: var(--muted); }
+.stats dd { margin: 2px 0 0; font-family: var(--font-mono); font-size: 0.95rem; overflow-wrap: anywhere; }
+.alerts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.alerts li { display: flex; gap: 10px; align-items: baseline; font-size: 0.92rem; padding: 8px 12px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
+.alerts li.warn { background: var(--warn-soft); border-color: transparent; }
+.tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; flex: none; color: var(--muted); }
+.alerts li.warn .tag { color: var(--warn); }
+.progress { display: grid; gap: 8px; }
+.progress-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.progress-top span { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
+.bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.25s ease; }
+.steps { border-bottom: 1px solid var(--line); }
+details { border-top: 1px solid var(--line); }
+summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 14px; padding: 16px 4px; min-height: 56px; }
+summary::-webkit-details-marker { display: none; }
+.num { font-family: var(--font-mono); font-size: 0.9rem; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; flex: none; }
+details.done .num { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.s-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; line-height: 1.15; flex: 1; min-width: 0; }
+.count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); flex: none; }
+summary::after { content: "+"; font-family: var(--font-mono); color: var(--muted); flex: none; width: 16px; text-align: center; }
+details[open] > summary::after { content: "−"; }
+.s-body { padding: 0 4px 22px 52px; display: grid; gap: 12px; }
+@media (max-width: 520px) { .s-body { padding-left: 4px; } }
+.s-note { color: var(--muted); font-size: 0.92rem; }
+.s-alert { background: var(--warn-soft); color: var(--fg); padding: 8px 12px; border-radius: 6px; font-size: 0.9rem; }
+.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.chk { display: flex; gap: 12px; align-items: flex-start; padding: 8px 6px; border-radius: 6px; cursor: pointer; }
+.chk:hover { background: var(--surface); }
+.chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
+.chk span { min-width: 0; }
+.chk input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+code { font-family: var(--font-mono); font-size: 0.85em; background: var(--surface); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
+.share { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 12px; }
+.share textarea { min-height: 120px; font-family: var(--font-mono); font-size: 0.85rem; resize: vertical; }
+.share-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.live { color: var(--good); font-size: 0.9rem; min-height: 1.4em; }
+.foot { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
+.fig { margin: 0; display: grid; gap: 6px; }
+.fig figcaption { font-size: 0.8rem; color: var(--muted); }
+.ill { width: 100%; max-width: 560px; height: auto; display: block; }
+.ill text { font-family: var(--font-body); font-size: 13px; fill: var(--fg); }
+.ill .mu { fill: var(--muted); font-size: 11.5px; }
+.ill .b { font-weight: 600; }
+.ill .sm { font-size: 12px; }
+.ill .bg { fill: var(--surface); stroke: var(--line); }
+.ill .pn { fill: var(--raised); stroke: var(--line); }
+.ill .hl { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+.ill .ln { stroke: var(--line); fill: none; }
+.ill .ar { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+.ill .acf { fill: var(--accent); }
+.ill .inv { fill: var(--accent-ink); }
+.ill .sky { fill: var(--accent-soft); }
+.hero { display: grid; gap: 22px; align-items: center; }
+@media (min-width: 820px) { .hero { grid-template-columns: minmax(0, 1fr) 300px; } }
+.hero figure { margin: 0; display: grid; gap: 6px; }
+.hero figcaption { font-size: 0.8rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Radio 2 DIN con Android Auto</p>
+      <h1>Guía Radio Android</h1>
+      <p class="lede">Ingresa los datos reales de tu radio y los pasos para mejorar su interfaz se ajustan solos al hardware que tiene. Tu avance queda guardado en este navegador.</p>
+    </div>
+    <figure>
+      <svg class="ill" viewBox="0 0 300 170" role="img" aria-label="Radio de auto doble DIN con pantalla táctil">
+        <rect class="bg" x="0.5" y="0.5" width="299" height="169" rx="8"/>
+        <rect class="pn" x="14" y="30" width="272" height="110" rx="10"/>
+        <circle class="bg" cx="34" cy="85" r="12"/>
+        <circle class="bg" cx="266" cy="85" r="12"/>
+        <rect class="bg" x="54" y="42" width="192" height="86" rx="6"/>
+        <rect class="pn" x="62" y="50" width="56" height="32" rx="4"/>
+        <rect class="pn" x="124" y="50" width="56" height="32" rx="4"/>
+        <rect class="hl" x="186" y="50" width="52" height="32" rx="4"/>
+        <rect class="pn" x="62" y="88" width="56" height="32" rx="4"/>
+        <rect class="pn" x="124" y="88" width="56" height="32" rx="4"/>
+        <rect class="pn" x="186" y="88" width="52" height="32" rx="4" stroke-dasharray="4 4"/>
+        <text class="mu" x="150" y="156" text-anchor="middle">Radio 2 DIN con Android</text>
+      </svg>
+      <figcaption>Ilustración de referencia.</figcaption>
+    </figure>
+  </header>
+
+  <div class="layout">
+    <aside class="panel" aria-label="Datos de tu radio">
+      <h2>Tu radio</h2>
+      <p class="hint">Los valores iniciales salen de la ficha publicada de una radio Carlaoer de 9 pulgadas y 4 núcleos. Cámbialos por los de tu equipo.</p>
+
+      <div class="field">
+        <label for="f-model">Marca y modelo</label>
+        <input type="text" id="f-model" maxlength="60" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-screen">Pantalla</label>
+        <select id="f-screen">
+          <option value="7">7 pulgadas</option>
+          <option value="9">9 pulgadas</option>
+          <option value="10">10 pulgadas</option>
+        </select>
+      </div>
+
+      <p class="group-title">Hardware real (paso 1)</p>
+      <div class="field">
+        <label for="f-cores">Núcleos del procesador</label>
+        <select id="f-cores">
+          <option value="4">4 núcleos</option>
+          <option value="8">8 núcleos</option>
+          <option value="?">Aún no lo sé</option>
+        </select>
+        <small>CPU-Z o Device Info HW lo muestran.</small>
+      </div>
+      <div class="field">
+        <label for="f-ram">RAM real</label>
+        <select id="f-ram">
+          <option value="1">1 GB</option>
+          <option value="2">2 GB</option>
+          <option value="3">3 GB</option>
+          <option value="4">4 GB</option>
+          <option value="6">6 GB o más</option>
+          <option value="?">Aún no lo sé</option>
+        </select>
+        <small>La ficha puede decir más de lo que el equipo trae.</small>
+      </div>
+      <div class="field">
+        <label for="f-android">Versión de Android</label>
+        <select id="f-android">
+          <option value="7">7 o anterior</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13 o superior</option>
+          <option value="?">Aún no lo sé</option>
+        </select>
+        <small>Ajustes &gt; Acerca del dispositivo.</small>
+      </div>
+
+      <p class="group-title">Software y conexión</p>
+      <div class="field">
+        <label for="f-play">¿Tiene Google Play?</label>
+        <select id="f-play">
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+          <option value="?">Aún no lo sé</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-dev">Opciones de desarrollador</label>
+        <select id="f-dev">
+          <option value="si">Ya puedo entrar</option>
+          <option value="no">No aparecen</option>
+          <option value="?">Aún no lo he probado</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-link">Cómo conectas Android Auto</label>
+        <select id="f-link">
+          <option value="cable">Por cable USB</option>
+          <option value="wifi">Inalámbrico</option>
+          <option value="?">Aún no lo sé</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-proj">App de proyección de la radio</label>
+        <select id="f-proj">
+          <option value="zlink">ZLink</option>
+          <option value="carlink">Carlink</option>
+          <option value="otra">Otra</option>
+          <option value="?">Aún no lo sé</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-obd">Datos del auto (OBD2)</label>
+        <select id="f-obd">
+          <option value="tengo">Ya tengo un adaptador</option>
+          <option value="quiero">Quiero comprar uno</option>
+          <option value="no">No por ahora</option>
+        </select>
+      </div>
+
+      <button type="button" class="btn" id="btn-reset">Volver a los datos iniciales</button>
+    </aside>
+
+    <main>
+      <section class="diag" aria-labelledby="diag-title">
+        <div class="diag-head">
+          <h2 id="diag-title">Diagnóstico</h2>
+          <span class="model" id="d-model"></span>
+        </div>
+        <div>
+          <div class="gauge" aria-hidden="true"><div class="seg" id="g0"></div><div class="seg" id="g1"></div><div class="seg" id="g2"></div></div>
+          <div class="gauge-labels" aria-hidden="true"><span id="gl0">Liviano</span><span id="gl1">Medio</span><span id="gl2">Holgado</span></div>
+        </div>
+        <div>
+          <p class="verdict" id="d-verdict"></p>
+          <p class="lede" id="d-text" style="margin-top:6px"></p>
+        </div>
+        <dl class="stats" id="d-stats"></dl>
+        <ul class="alerts" id="d-alerts"></ul>
+      </section>
+
+      <section class="progress" aria-label="Avance">
+        <div class="progress-top"><h2>Tu guía paso a paso</h2><span id="p-text"></span></div>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="p-bar"><i id="p-fill"></i></div>
+      </section>
+
+      <div class="steps" id="steps"></div>
+
+      <section class="share" aria-labelledby="share-title">
+        <h2 id="share-title">Resumen para compartir</h2>
+        <p class="foot">Copia este texto para pegarlo en un grupo o pedir ayuda con tu radio.</p>
+        <textarea id="summary" readonly aria-label="Resumen de tu radio"></textarea>
+        <div class="share-row">
+          <button type="button" class="btn primary" id="btn-copy">Copiar resumen</button>
+          <span class="live" id="live" role="status"></span>
+        </div>
+      </section>
+
+      <p class="foot">Los nombres de los menús cambian según el firmware de cada radio. Las cantidades de widgets y las escalas de animación son sugerencias para el nivel de tu equipo, no valores oficiales. Confirma precios y funciones de las apps en su ficha antes de instalarlas.</p>
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY_P = 'radio-guia-perfil-v1', KEY_C = 'radio-guia-checks-v1';
+  var DEFAULT = { model: 'Carlaoer 2 DIN 9"', screen: '9', cores: '4', ram: '?', android: '?', play: '?', link: '?', proj: '?', dev: '?', obd: 'no' };
+  var IDS = Object.keys(DEFAULT);
+
+  function read(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+  function write(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var profile = Object.assign({}, DEFAULT, read(KEY_P) || {});
+  var checks = read(KEY_C) || {};
+  var closed = {};
+
+  var $ = function (id) { return document.getElementById(id); };
+  var stepsEl = $('steps');
+
+  function num(v) { return v === '?' ? null : Number(v); }
+
+  function tier(p) {
+    var r = num(p.ram);
+    if (p.cores === '?' && r === null) {
+      return { key: 'pend', idx: -1, label: 'Faltan datos', text: 'Faltan los núcleos y la RAM reales. Mientras tanto, la guía usa recomendaciones prudentes.' };
+    }
+    if (p.cores === '4' || (r !== null && r <= 2)) {
+      return { key: 'liviano', idx: 0, label: 'Liviano', text: 'Equipo modesto. Conviene priorizar la fluidez: pocos widgets, fondo estático y un launcher simple.' };
+    }
+    if (p.cores === '8' && r !== null && r >= 4) {
+      return { key: 'holgado', idx: 2, label: 'Holgado', text: 'Equipo con margen. Aun así, mantén la interfaz sencilla para usarla conduciendo.' };
+    }
+    return { key: 'medio', idx: 1, label: 'Medio', text: 'Equipo intermedio. Puedes personalizar con moderación, probando un cambio a la vez.' };
+  }
+
+  function alerts(p) {
+    var out = [];
+    var r = num(p.ram), a = num(p.android);
+    if (p.cores === '?') out.push({ k: 'info', t: 'Falta confirmar los núcleos del procesador.' });
+    if (p.ram === '?') out.push({ k: 'info', t: 'Falta confirmar la RAM real. La ficha de este tipo de radios suele ser ambigua.' });
+    if (p.android === '?') out.push({ k: 'info', t: 'Falta confirmar la versión real de Android en Ajustes.' });
+    if (p.cores === '4' && a !== null && a >= 12) out.push({ k: 'warn', t: 'Android 12 o superior en una radio económica de 4 núcleos es poco habitual. Confirma la versión real en Ajustes.' });
+    if (p.cores === '4' && r !== null && r >= 4) out.push({ k: 'warn', t: 'Con 4 núcleos, aunque la ficha diga 4 GB de RAM, mantén todo liviano.' });
+    if (r !== null && r <= 1) out.push({ k: 'warn', t: 'Con 1 GB de RAM usa el launcher original y evita widgets pesados.' });
+    if (a !== null && a <= 7) out.push({ k: 'warn', t: 'En Android 7 o anterior, muchas apps actuales piden una versión más nueva. Revisa los requisitos en la ficha de cada app.' });
+    return out;
+  }
+
+  function projName(p) {
+    return { zlink: 'ZLink', carlink: 'Carlink', otra: 'la app de proyección de tu radio', '?': 'la app de proyección de tu radio' }[p.proj];
+  }
+
+  var OPEN = '<svg class="ill" viewBox="0 0 520 ';
+  var BG = '<rect class="bg" x="0.5" y="0.5" width="519" height="';
+  var ART = {
+    s1: OPEN + '220" role="img" aria-label="Dos lugares donde ver los datos reales: Ajustes y CPU-Z">' + BG + '219" rx="8"/>' +
+      '<rect class="pn" x="16" y="16" width="234" height="188" rx="8"/>' +
+      '<text class="b sm" x="28" y="40">Ajustes &gt; Acerca del dispositivo</text>' +
+      '<rect class="bg" x="28" y="56" width="210" height="32" rx="6"/><text x="40" y="76">Modelo</text><text class="mu" x="226" y="76" text-anchor="end">···</text>' +
+      '<rect class="bg" x="28" y="96" width="210" height="32" rx="6"/><text x="40" y="116">Versión de Android</text><text class="mu" x="226" y="116" text-anchor="end">···</text>' +
+      '<rect class="hl" x="28" y="136" width="210" height="32" rx="6"/><text x="40" y="156">Número de compilación</text>' +
+      '<rect class="pn" x="270" y="16" width="234" height="188" rx="8"/>' +
+      '<text class="b sm" x="282" y="40">CPU-Z o Device Info HW</text>' +
+      '<rect class="bg" x="282" y="56" width="210" height="32" rx="6"/><text x="294" y="76">Procesador</text><text class="mu" x="480" y="76" text-anchor="end">···</text>' +
+      '<rect class="bg" x="282" y="96" width="210" height="32" rx="6"/><text x="294" y="116">Núcleos</text><text class="mu" x="480" y="116" text-anchor="end">···</text>' +
+      '<rect class="bg" x="282" y="136" width="210" height="32" rx="6"/><text x="294" y="156">RAM real</text><text class="mu" x="480" y="156" text-anchor="end">···</text>' +
+      '</svg>',
+    s2: OPEN + '220" role="img" aria-label="Interruptores de apps desconocidas y depuración USB">' + BG + '219" rx="8"/>' +
+      '<rect class="pn" x="16" y="16" width="488" height="188" rx="8"/>' +
+      '<text class="b sm" x="28" y="40">Ajustes</text>' +
+      '<rect class="bg" x="28" y="52" width="464" height="40" rx="6"/><text x="44" y="77">Instalar apps desconocidas</text>' +
+      '<rect class="acf" x="436" y="60" width="44" height="24" rx="12"/><circle class="inv" cx="468" cy="72" r="9"/>' +
+      '<rect class="bg" x="28" y="100" width="464" height="40" rx="6"/><text x="44" y="125">Depuración USB</text>' +
+      '<rect class="acf" x="436" y="108" width="44" height="24" rx="12"/><circle class="inv" cx="468" cy="120" r="9"/>' +
+      '<rect class="hl" x="28" y="148" width="464" height="40" rx="6"/><text x="44" y="173">Número de compilación</text><text class="mu" x="476" y="173" text-anchor="end">toca varias veces</text>' +
+      '</svg>',
+    s3: OPEN + '220" role="img" aria-label="Tres tipos de launcher para probar de a uno">' + BG + '219" rx="8"/>' +
+      '<rect class="hl" x="16" y="24" width="148" height="150" rx="8"/>' +
+      '<rect class="pn" x="186" y="24" width="148" height="150" rx="8"/>' +
+      '<rect class="pn" x="356" y="24" width="148" height="150" rx="8"/>' +
+      [16, 186, 356].map(function (x) {
+        return '<rect class="bg" x="' + (x + 16) + '" y="40" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 52) + '" y="40" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 88) + '" y="40" width="28" height="28" rx="6"/>' +
+          '<rect class="bg" x="' + (x + 16) + '" y="76" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 52) + '" y="76" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 88) + '" y="76" width="28" height="28" rx="6"/>';
+      }).join('') +
+      '<text class="b" x="30" y="132">Original</text><text class="mu" x="30" y="152">Lo más seguro</text>' +
+      '<text class="b" x="200" y="132">Nova Launcher</text><text class="mu" x="200" y="152">Más ajustes</text>' +
+      '<text class="b" x="370" y="132">De auto</text><text class="mu" x="370" y="152">Más widgets</text>' +
+      '<text class="mu" x="260" y="204" text-anchor="middle">Prueba uno a la vez y conserva el que vaya fluido</text>' +
+      '</svg>',
+    s4: OPEN + '240" role="img" aria-label="Pantalla de inicio con widgets y accesos grandes">' + BG + '239" rx="8"/>' +
+      '<rect class="pn" x="16" y="16" width="488" height="208" rx="10"/>' +
+      '<rect class="bg" x="28" y="28" width="120" height="84" rx="6"/><text x="88" y="74" text-anchor="middle" class="b sm">Reloj</text>' +
+      '<rect class="bg" x="28" y="120" width="120" height="84" rx="6"/><text x="88" y="166" text-anchor="middle" class="b sm">Música</text>' +
+      '<rect class="bg" x="160" y="28" width="92" height="84" rx="6"/><text x="206" y="74" text-anchor="middle" class="b sm">Mapas</text>' +
+      '<rect class="bg" x="260" y="28" width="92" height="84" rx="6"/><text x="306" y="74" text-anchor="middle" class="b sm">Teléfono</text>' +
+      '<rect class="hl" x="160" y="120" width="92" height="84" rx="6"/><text x="206" y="166" text-anchor="middle" class="b sm">Android Auto</text>' +
+      '<rect class="bg" x="260" y="120" width="92" height="84" rx="6"/><text x="306" y="166" text-anchor="middle" class="b sm">Apps</text>' +
+      '<rect class="bg" x="364" y="28" width="128" height="176" rx="6" stroke-dasharray="4 4"/><text x="428" y="112" text-anchor="middle" class="b sm">Datos del auto</text><text x="428" y="130" text-anchor="middle" class="mu">opcional</text>' +
+      '</svg>',
+    s5: OPEN + '220" role="img" aria-label="Fondo estático y escalas de animación reducidas">' + BG + '219" rx="8"/>' +
+      '<rect class="pn" x="16" y="16" width="180" height="188" rx="8"/>' +
+      '<rect class="sky" x="28" y="28" width="156" height="120" rx="6"/><circle class="acf" cx="150" cy="58" r="14"/>' +
+      '<polygon points="28,148 80,84 118,124 146,98 184,148" fill="var(--line)"/>' +
+      '<text class="b sm" x="106" y="176" text-anchor="middle">Fondo estático</text><text class="mu" x="106" y="194" text-anchor="middle">una sola imagen</text>' +
+      '<rect class="pn" x="212" y="16" width="292" height="188" rx="8"/>' +
+      '<text class="b sm" x="228" y="40">Opciones de desarrollador</text>' +
+      [['Escala de animación de ventana', 76], ['Escala de transición', 116], ['Escala de duración', 156]].map(function (r) {
+        return '<text class="sm" x="228" y="' + r[1] + '">' + r[0] + '</text><line class="ln" x1="228" y1="' + (r[1] + 16) + '" x2="440" y2="' + (r[1] + 16) + '" stroke-width="3"/><circle class="acf" cx="300" cy="' + (r[1] + 16) + '" r="8"/><text class="mu" x="488" y="' + (r[1] + 20) + '" text-anchor="end">0,5x</text>';
+      }).join('') +
+      '</svg>',
+    s6: OPEN + '232" role="img" aria-label="Secuencia de arranque: encender el auto, la radio abre la app de proyección y Android Auto">' + BG + '231" rx="8"/>' +
+      '<rect class="pn" x="16" y="30" width="104" height="52" rx="6"/><text class="sm" x="68" y="52" text-anchor="middle">Encender</text><text class="sm" x="68" y="68" text-anchor="middle">el auto</text>' +
+      '<rect class="pn" x="140" y="30" width="104" height="52" rx="6"/><text class="sm" x="192" y="52" text-anchor="middle">La radio</text><text class="sm" x="192" y="68" text-anchor="middle">arranca</text>' +
+      '<rect class="hl" x="264" y="30" width="104" height="52" rx="6"/><text class="sm b" x="316" y="52" text-anchor="middle">App de</text><text class="sm b" x="316" y="68" text-anchor="middle">proyección</text>' +
+      '<rect class="pn" x="388" y="30" width="104" height="52" rx="6"/><text class="sm" x="440" y="52" text-anchor="middle">Android</text><text class="sm" x="440" y="68" text-anchor="middle">Auto</text>' +
+      '<path class="ar" d="M120 56H138M244 56H262M368 56H386"/>' +
+      '<path class="ar" d="M316 84V148"/>' +
+      '<text class="mu" x="326" y="120">cable USB o inalámbrico</text>' +
+      '<rect class="pn" x="286" y="150" width="60" height="64" rx="8"/><rect class="bg" x="294" y="160" width="44" height="34" rx="3"/><circle class="ln" cx="316" cy="204" r="3"/>' +
+      '<text class="sm" x="270" y="186" text-anchor="end">Tu celular</text>' +
+      '</svg>',
+    s7: OPEN + '200" role="img" aria-label="El adaptador OBD2 se conecta al auto y envía datos a la radio">' + BG + '199" rx="8"/>' +
+      '<rect class="pn" x="16" y="70" width="140" height="60" rx="6"/><text class="b sm" x="86" y="96" text-anchor="middle">Puerto OBD2</text><text class="mu" x="86" y="114" text-anchor="middle">bajo el volante</text>' +
+      '<rect class="hl" x="190" y="70" width="140" height="60" rx="6"/><text class="b sm" x="260" y="96" text-anchor="middle">Adaptador</text><text class="mu" x="260" y="114" text-anchor="middle">ELM327</text>' +
+      '<rect class="pn" x="364" y="70" width="140" height="60" rx="6"/><text class="b sm" x="434" y="96" text-anchor="middle">Radio</text><text class="mu" x="434" y="114" text-anchor="middle">app OBD2</text>' +
+      '<path class="ar" d="M156 100H188M330 100H362"/>' +
+      '<text class="mu" x="173" y="60" text-anchor="middle">se enchufa</text><text class="mu" x="347" y="60" text-anchor="middle">Bluetooth o WiFi</text>' +
+      '<text class="mu" x="260" y="168" text-anchor="middle">Velocidad, temperatura y consumo en tu pantalla</text>' +
+      '</svg>',
+    s8: OPEN + '190" role="img" aria-label="Ruta en Ajustes para volver al launcher original">' + BG + '189" rx="8"/>' +
+      '<rect class="pn" x="20" y="24" width="108" height="52" rx="6"/><text class="sm" x="74" y="55" text-anchor="middle">Ajustes</text>' +
+      '<rect class="pn" x="144" y="24" width="108" height="52" rx="6"/><text class="sm" x="198" y="55" text-anchor="middle">Apps</text>' +
+      '<rect class="pn" x="268" y="24" width="108" height="52" rx="6"/><text class="sm" x="322" y="46" text-anchor="middle">Apps</text><text class="sm" x="322" y="62" text-anchor="middle">predeterminadas</text>' +
+      '<rect class="pn" x="392" y="24" width="108" height="52" rx="6"/><text class="sm" x="446" y="46" text-anchor="middle">Pantalla</text><text class="sm" x="446" y="62" text-anchor="middle">de inicio</text>' +
+      '<path class="ar" d="M128 50H142M252 50H266M376 50H390"/>' +
+      '<path class="ar" d="M446 76V100H260V118"/>' +
+      '<rect class="hl" x="196" y="120" width="128" height="44" rx="6"/><text class="b sm" x="260" y="147" text-anchor="middle">Launcher original</text>' +
+      '</svg>'
+  };
+
+  function buildSteps(p, t) {
+    var tk = t.key === 'pend' ? 'liviano' : t.key;
+    var a = num(p.android);
+    var res = p.screen === '7' ? '1024 x 600' : '1280 x 720';
+    var widgets = { liviano: 2, medio: 3, holgado: 4 }[tk];
+    var s = [];
+
+    // 1
+    var s1 = { id: 's1', title: 'Conoce tu radio', items: [
+      { id: 's1-ajustes', html: 'Abre <strong>Ajustes &gt; Acerca del dispositivo</strong> y anota la versión de Android, el modelo y el número de compilación.' },
+      { id: 's1-cpuz', html: 'Instala <strong>CPU-Z</strong> o <strong>Device Info HW</strong> y anota procesador, núcleos, RAM real y almacenamiento libre.' },
+      { id: 's1-form', html: 'Completa el formulario con esos datos: la guía se ajusta sola.' }
+    ] };
+    var falta = [];
+    if (p.cores === '?') falta.push('núcleos');
+    if (p.ram === '?') falta.push('RAM');
+    if (p.android === '?') falta.push('versión de Android');
+    if (falta.length) s1.note = 'Todavía faltan: ' + falta.join(', ') + '.';
+    s.push(s1);
+
+    // 2
+    var perm;
+    if (a === null) perm = 'Busca <strong>Orígenes desconocidos</strong> en Ajustes &gt; Seguridad, o <strong>Instalar apps desconocidas</strong> dentro de Ajustes &gt; Apps, según tu versión.';
+    else if (a >= 8) perm = 'En tu versión el permiso es por app: activa <strong>Instalar apps desconocidas</strong> para el gestor de archivos o el navegador desde el que abrirás el APK.';
+    else perm = 'En tu versión, activa <strong>Orígenes desconocidos</strong> en Ajustes &gt; Seguridad.';
+    var dev;
+    if (p.dev === 'si') dev = 'Activa <strong>Depuración USB</strong> dentro de Opciones de desarrollador.';
+    else if (p.dev === 'no') dev = 'Si no aparece el modo desarrollador, busca el menú de fábrica del firmware. La contraseña varía; suele probarse 123456 u 8888, sin garantía.';
+    else dev = 'Toca varias veces el <strong>número de compilación</strong> para abrir Opciones de desarrollador. Si no aparece, busca el menú de fábrica del firmware.';
+    s.push({ id: 's2', title: 'Permite instalar apps y activa el modo desarrollador', items: [
+      { id: 's2-perm', html: perm },
+      { id: 's2-dev', html: dev },
+      { id: 's2-seg', html: 'Descarga los APK solo desde páginas oficiales y desactiva el permiso al terminar.' }
+    ] });
+
+    // 3
+    var inst;
+    if (p.play === 'si') inst = 'Instálalo desde <strong>Google Play</strong>.';
+    else if (p.play === 'no') inst = 'Descarga el APK desde la página oficial del launcher en tu celular, pásalo por pendrive USB y ábrelo con el gestor de archivos de la radio.';
+    else inst = 'Revisa si la radio trae Google Play. Si no, descarga el APK desde la página oficial en tu celular y pásalo por pendrive USB.';
+    var rec = {
+      liviano: 'Empieza con el <strong>launcher original</strong> de la radio y cambia solo fondo e iconos. Si necesitas más, prueba <strong>Nova Launcher</strong> con los efectos desactivados.',
+      medio: 'Prueba <strong>Nova Launcher</strong> o un launcher de auto como <strong>AGAMA</strong> o <strong>CarWebGuru</strong>, uno a la vez.',
+      holgado: 'Puedes probar launchers de auto con más widgets, como <strong>AGAMA</strong> o <strong>CarWebGuru</strong>, y personalizarlos más.'
+    }[tk];
+    s.push({ id: 's3', title: 'Elige e instala un launcher', items: [
+      { id: 's3-rec', html: rec },
+      { id: 's3-inst', html: inst },
+      { id: 's3-prueba', html: 'Antes de dejarlo como predeterminado, ábrelo unos minutos con el auto detenido. Si se cierra o va lento, desinstálalo y prueba uno más simple.' },
+      { id: 's3-ficha', html: 'Confirma funciones y precios actuales en la ficha de la app.' }
+    ] });
+
+    // 4
+    s.push({ id: 's4', title: 'Arma tu pantalla de inicio', items: [
+      { id: 's4-def', html: 'Presiona <strong>Inicio</strong> y elige el launcher nuevo con <strong>Siempre</strong>, o ve a Ajustes &gt; Apps &gt; Apps predeterminadas &gt; Pantalla de inicio.' },
+      { id: 's4-widgets', html: 'Pon como máximo <strong>' + widgets + ' widgets</strong> (sugerencia para tu nivel): reloj, música y, si quieres, datos OBD2.' },
+      { id: 's4-aa', html: 'Deja <strong>' + projName(p) + '</strong> como acceso grande y destacado.' },
+      { id: 's4-resto', html: 'Agrupa el resto en una carpeta. Botones grandes y nada que obligue a escribir.' }
+    ] });
+
+    // 5
+    var anim = {
+      liviano: 'En Opciones de desarrollador baja las tres escalas de animación a <strong>0,5x</strong> o desactívalas.',
+      medio: 'En Opciones de desarrollador baja las tres escalas de animación a <strong>0,5x</strong>.',
+      holgado: 'Puedes dejar las animaciones en 1x. Si notas tirones, bájalas a <strong>0,5x</strong>.'
+    }[tk];
+    s.push({ id: 's5', title: 'Cuida la apariencia sin perder fluidez', note: 'La resolución de ' + res + ' es la típica para pantallas de ' + p.screen + ' pulgadas. Confirma la tuya con Device Info HW.', items: [
+      { id: 's5-fondo', html: 'Usa un fondo <strong>estático</strong> (JPG o PNG) de ' + res + '. Evita fondos animados o en video.' },
+      { id: 's5-anim', html: anim },
+      { id: 's5-tema', html: 'Elige tema oscuro e iconos grandes.' },
+      { id: 's5-apps', html: (tk === 'liviano' ? 'Con poca memoria esto pesa más: desactiva' : 'Desactiva') + ' o desinstala las apps preinstaladas que no uses.' }
+    ] });
+
+    // 6
+    var enlace;
+    if (p.link === 'cable') enlace = 'Conecta con un <strong>cable USB corto y de buena calidad</strong> en el puerto que la radio dedica a la proyección. Si hay varios, prueba uno por uno.';
+    else if (p.link === 'wifi') enlace = 'Para la conexión inalámbrica, empareja primero por <strong>Bluetooth</strong>, acepta los permisos que pida el celular y mantén WiFi y Bluetooth activos.';
+    else enlace = 'Define si conectas por cable o inalámbrico. Con cable usa un USB corto y bueno; inalámbrico se empareja primero por Bluetooth.';
+    s.push({ id: 's6', title: 'Haz que Android Auto abra al encender', note: p.link === '?' || p.proj === '?' ? 'Completa en el formulario cómo conectas y qué app de proyección usa tu radio.' : '', items: [
+      { id: 's6-boot', html: 'En la radio busca <strong>App de inicio</strong>, <em>Boot app</em> o <em>Autostart</em> y elige <strong>' + projName(p) + '</strong>.' },
+      { id: 's6-enlace', html: enlace },
+      { id: 's6-auto', html: 'Dentro de la app de proyección, activa <strong>Conexión automática</strong> (<em>Auto connect</em>) si existe.' },
+      { id: 's6-cel', html: 'En el celular activa el inicio automático de Android Auto, Bluetooth y ubicación, y quita el ahorro de batería para Android Auto.' },
+      { id: 's6-tasker', html: 'Si la radio no deja elegir app de inicio, crea en <strong>Tasker</strong> o <strong>MacroDroid</strong> una regla: al iniciar el sistema, abrir la app de proyección.' },
+      { id: 's6-espera', html: 'Tras encender, la radio puede tardar entre 20 y 40 segundos en reconocer el celular. Es normal.' }
+    ] });
+
+    // 7
+    if (p.obd === 'no') {
+      s.push({ id: 's7', title: 'Datos del auto con OBD2', skip: true, note: 'No aplica por ahora. Cámbialo en el formulario cuando quieras ver velocidad, temperatura o consumo en la radio.', items: [] });
+    } else {
+      var items7 = [];
+      if (p.obd === 'quiero') items7.push({ id: 's7-compra', html: 'Compra un adaptador <strong>ELM327</strong> Bluetooth o WiFi y verifica que sea compatible con tu auto.' });
+      items7.push({ id: 's7-puerto', html: 'Conéctalo al puerto OBD2, que suele estar bajo el volante.' });
+      items7.push({ id: 's7-pareo', html: 'Empareja el adaptador desde la radio, por Bluetooth o conectándote a su red WiFi.' });
+      items7.push({ id: 's7-app', html: 'Instala <strong>Torque</strong> o <strong>Car Scanner ELM OBD2</strong> y elige el adaptador en sus ajustes.' });
+      items7.push({ id: 's7-widget', html: tk === 'liviano' ? 'Agrega un solo widget OBD2 y mantén la app simple.' : 'Agrega el widget de datos a tu pantalla de inicio.' });
+      items7.push({ id: 's7-bateria', html: 'Si el auto pierde batería estando apagado, desconecta el adaptador: algunos modelos baratos quedan activos.' });
+      s.push({ id: 's7', title: 'Datos del auto con OBD2', items: items7 });
+    }
+
+    // 8
+    s.push({ id: 's8', title: 'Respaldo y seguridad', items: [
+      { id: 's8-anota', html: 'Anota cuál era el launcher original y la app de inicio antes de cambiar nada.' },
+      { id: 's8-volver', html: 'Si algo falla, vuelve al original en Ajustes &gt; Apps &gt; Apps predeterminadas &gt; Pantalla de inicio, o desinstala el launcher nuevo.' },
+      { id: 's8-cuentas', html: 'No inicies sesión con cuentas importantes en la radio: el firmware genérico puede tener parches antiguos.' },
+      { id: 's8-detenido', html: 'Configura todo con el auto detenido.' }
+    ] });
+
+    s.forEach(function (st) { if (ART[st.id] && !st.skip) st.art = ART[st.id]; });
+    return s;
+  }
+
+  function renderDiag(p, t) {
+    $('d-model').textContent = (p.model || 'Sin nombre') + ' · ' + p.screen + '"';
+    for (var i = 0; i < 3; i++) {
+      $('g' + i).classList.toggle('on', i <= t.idx);
+      $('gl' + i).classList.toggle('cur', i === t.idx);
+    }
+    $('d-verdict').textContent = t.label;
+    $('d-text').textContent = t.text;
+    var stats = [
+      ['Pantalla', p.screen + ' pulgadas'],
+      ['Procesador', p.cores === '?' ? 'Sin dato' : p.cores + ' núcleos'],
+      ['RAM', p.ram === '?' ? 'Sin dato' : (p.ram === '6' ? '6 GB o más' : p.ram + ' GB')],
+      ['Android', p.android === '?' ? 'Sin dato' : (p.android === '7' ? '7 o anterior' : (p.android === '13' ? '13 o superior' : p.android))]
+    ];
+    var dl = $('d-stats');
+    dl.innerHTML = '';
+    stats.forEach(function (x) {
+      var d = document.createElement('div');
+      var dt = document.createElement('dt'); dt.textContent = x[0];
+      var dd = document.createElement('dd'); dd.textContent = x[1];
+      d.appendChild(dt); d.appendChild(dd); dl.appendChild(d);
+    });
+    var ul = $('d-alerts');
+    ul.innerHTML = '';
+    alerts(p).forEach(function (al) {
+      var li = document.createElement('li');
+      li.className = al.k;
+      var tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = al.k === 'warn' ? 'Verifica' : 'Dato';
+      var tx = document.createElement('span'); tx.textContent = al.t;
+      li.appendChild(tag); li.appendChild(tx); ul.appendChild(li);
+    });
+  }
+
+  function renderSteps(list) {
+    var html = '';
+    list.forEach(function (st, i) {
+      var open = (!closed[st.id] && !st.skip) ? ' open' : '';
+      html += '<details data-id="' + st.id + '"' + open + '><summary><span class="num">' + (i + 1) + '</span><span class="s-title">' + st.title + '</span><span class="count"></span></summary><div class="s-body">';
+      if (st.note) html += '<p class="s-note">' + st.note + '</p>';
+      if (st.art) html += '<figure class="fig">' + st.art + '<figcaption>Ilustración de referencia: tu pantalla puede verse distinta.</figcaption></figure>';
+      if (st.items.length) {
+        html += '<ul class="items">';
+        st.items.forEach(function (it) {
+          html += '<li><label class="chk"><input type="checkbox" data-id="' + it.id + '"' + (checks[it.id] ? ' checked' : '') + '><span>' + it.html + '</span></label></li>';
+        });
+        html += '</ul>';
+      }
+      html += '</div></details>';
+    });
+    stepsEl.innerHTML = html;
+  }
+
+  function summaryText(p, t, done, total) {
+    var ram = p.ram === '?' ? 'RAM sin confirmar' : 'RAM ' + (p.ram === '6' ? '6 GB o más' : p.ram + ' GB');
+    var cpu = p.cores === '?' ? 'núcleos sin confirmar' : p.cores + ' núcleos';
+    var an = p.android === '?' ? 'Android sin confirmar' : 'Android ' + (p.android === '7' ? '7 o anterior' : (p.android === '13' ? '13 o superior' : p.android));
+    return 'Mi radio: ' + (p.model || 'sin nombre') + ', pantalla de ' + p.screen + ' pulgadas.\n' +
+      'Hardware: ' + cpu + ', ' + ram + ', ' + an + '.\n' +
+      'Nivel de holgura: ' + t.label + '.\n' +
+      'Android Auto: ' + ({ cable: 'por cable', wifi: 'inalámbrico', '?': 'conexión sin definir' }[p.link]) + ', app de proyección ' + ({ zlink: 'ZLink', carlink: 'Carlink', otra: 'otra', '?': 'sin identificar' }[p.proj]) + '.\n' +
+      'Avance de la guía: ' + done + ' de ' + total + ' tareas.';
+  }
+
+  function updateProgress() {
+    var boxes = Array.prototype.slice.call(stepsEl.querySelectorAll('input[type=checkbox]'));
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    var total = boxes.length;
+    var pct = total ? Math.round(done * 100 / total) : 0;
+    $('p-fill').style.width = pct + '%';
+    $('p-bar').setAttribute('aria-valuenow', String(pct));
+    $('p-text').textContent = done + ' de ' + total + ' tareas';
+    Array.prototype.forEach.call(stepsEl.querySelectorAll('details'), function (d) {
+      var bs = Array.prototype.slice.call(d.querySelectorAll('input[type=checkbox]'));
+      var dn = bs.filter(function (b) { return b.checked; }).length;
+      d.querySelector('.count').textContent = bs.length ? dn + '/' + bs.length : 'No aplica';
+      d.classList.toggle('done', bs.length > 0 && dn === bs.length);
+    });
+    $('summary').value = summaryText(profile, tier(profile), done, total);
+  }
+
+  function render() {
+    var t = tier(profile);
+    renderDiag(profile, t);
+    renderSteps(buildSteps(profile, t));
+    updateProgress();
+  }
+
+  // Formulario
+  IDS.forEach(function (id) {
+    var el = $('f-' + id);
+    el.value = profile[id];
+    if (el.value !== profile[id] && el.tagName === 'SELECT') { el.value = DEFAULT[id]; profile[id] = DEFAULT[id]; }
+    el.addEventListener('input', function () {
+      profile[id] = el.value;
+      write(KEY_P, profile);
+      render();
+    });
+  });
+
+  stepsEl.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t && t.matches && t.matches('input[type=checkbox]')) {
+      checks[t.getAttribute('data-id')] = t.checked;
+      write(KEY_C, checks);
+      updateProgress();
+    }
+  });
+  stepsEl.addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (d && d.tagName === 'DETAILS') closed[d.getAttribute('data-id')] = !d.open;
+  }, true);
+
+  // Copiar
+  var live = $('live'), liveTimer;
+  function flash(msg) { live.textContent = msg; clearTimeout(liveTimer); liveTimer = setTimeout(function () { live.textContent = ''; }, 3500); }
+  $('btn-copy').addEventListener('click', function () {
+    var ta = $('summary');
+    ta.select();
+    var ok;
+    try { ok = navigator.clipboard && navigator.clipboard.writeText(ta.value); } catch (e) { ok = null; }
+    if (ok && ok.then) ok.then(function () { flash('Resumen copiado.'); }, function () { ta.select(); flash('Selecciona el texto y cópialo.'); });
+    else flash('Selecciona el texto y cópialo.');
+  });
+
+  // Reiniciar (dos toques)
+  var rb = $('btn-reset'), rt;
+  rb.addEventListener('click', function () {
+    if (rb.getAttribute('data-armed') !== '1') {
+      rb.setAttribute('data-armed', '1');
+      rb.textContent = 'Toca otra vez para borrar datos y avance';
+      clearTimeout(rt);
+      rt = setTimeout(function () { rb.removeAttribute('data-armed'); rb.textContent = 'Volver a los datos iniciales'; }, 4000);
+      return;
+    }
+    clearTimeout(rt);
+    rb.removeAttribute('data-armed');
+    rb.textContent = 'Volver a los datos iniciales';
+    profile = Object.assign({}, DEFAULT);
+    checks = {};
+    closed = {};
+    write(KEY_P, profile);
+    write(KEY_C, checks);
+    IDS.forEach(function (id) { $('f-' + id).value = profile[id]; });
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
