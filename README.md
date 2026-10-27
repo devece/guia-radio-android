@@ -1,6 +1,6 @@
 # Guía Radio Android
 
-Guía interactiva para mejorar la interfaz de radios Android 2 DIN. Se ingresan las características del equipo (núcleos, RAM, Android, conexión, etc.) y los pasos se ajustan solos, con ilustraciones de referencia y un resumen para compartir.
+Sitio web interactivo (portada, cómo funciona, diagnóstico y guía en línea de tiempo) para mejorar la interfaz de radios Android 2 DIN. Se ingresan las características del equipo (núcleos, RAM, Android, conexión, etc.) y los pasos se ajustan solos, con ilustraciones de referencia y un resumen para compartir.
 
 - Sitio público: https://guia-radio-android-daniels-projects-f47730b3.vercel.app
 - Página única estática: `index.html` (sin dependencias ni build).
