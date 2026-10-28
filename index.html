@@ -137,7 +137,7 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
 .opt .ot{font-weight:600;font-size:17px}
 .opt .os{color:var(--muted);font-size:15px;grid-column:2}
 .opts.big{display:flex;flex-wrap:wrap;gap:22px}
-.opts.big .opt{align-content:start;flex:1 1 360px;min-width:0;grid-template-columns:1fr auto;gap:18px 12px;padding:26px;border-radius:20px}
+.opts.big .opt{align-content:start;flex:1 1 240px;min-width:0;grid-template-columns:1fr auto;gap:18px 12px;padding:26px;border-radius:20px}
 .opts.big .opt .mark{grid-row:1;grid-column:2;width:28px;height:28px;margin:0;font-size:15px}
 .opts.big .ill{grid-column:1 / -1;grid-row:1;display:block}
 .opts.big .ot{grid-column:1 / -1;font-family:var(--display);font-weight:500;font-size:clamp(24px,3vw,30px);letter-spacing:-.01em}
@@ -147,6 +147,10 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
 .mini .tiles i{border-radius:4px;outline-width:1.5px;outline-offset:1px}
 .mini .clk{position:absolute;left:8%;top:12%;font-family:var(--display);font-weight:300;font-size:22px;line-height:1}
 .mini.car{border-radius:12px;background:var(--code-bg)}
+.mini.box .puck{position:absolute;left:30%;top:50%;width:26%;aspect-ratio:1;transform:translateY(-50%);border-radius:12px;background:var(--ill-hi)}
+.mini.box .puck::after{content:"";position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:var(--ill-bg)}
+.mini.box .cab{position:absolute;left:56%;right:0;top:50%;height:4px;margin-top:-2px;background:var(--ill-tile)}
+.mini.box .cab::before{content:"";position:absolute;left:0;top:-3px;width:10px;height:10px;border-radius:2px;background:var(--ill-tile)}
 .mini.car .tiles{bottom:22%}
 .mini.car .tiles i{aspect-ratio:1/1}
 .mini.car .tiles i:nth-child(2){background:var(--amber);outline:0}
@@ -233,10 +237,19 @@ function mkBlock(b){
   return el('span');
 }
 
+function isAndroidTv(a){ return (a.device === 'tv' && a.tvsys === 'android') || (a.device === 'box' && a.boxkind !== 'fire'); }
+function normBox(a){
+  if (a.device !== 'box') return a;
+  var n = Object.assign({}, a);
+  n.device = 'tv'; n.isBox = true; n.brand = 'other'; n.tvsys = a.boxkind === 'fire' ? 'fire' : 'android';
+  return n;
+}
+
 /* ---------- preguntas ---------- */
 var Q = [
  { id:'device', t:'¿Qué quieres limpiar?', h:'Elige uno. Si tienes los dos, termina con uno y vuelve a empezar con el otro.', opts:function(){ return [
    { v:'tv', t:'Un televisor', s:'Google TV, Android TV o Fire TV', c:'Televisor' },
+   { v:'box', t:'Un TV Box o stick', s:'Xiaomi Mi Box, Mi TV Stick u otra caja que se conecta por HDMI a cualquier TV', c:'TV Box' },
    { v:'car', t:'Un radio de auto', s:'La pantalla del tablero: Android, Android Automotive, CarPlay o Android Auto', c:'Radio de auto' } ]; } },
 
  { id:'tvsys', when:function(a){ return a.device === 'tv'; }, t:'¿Qué sistema tiene tu TV?', h:'Se ve en el menú de inicio o en Ajustes → Sistema → Información.', opts:function(){ return [
@@ -250,11 +263,16 @@ var Q = [
    { v:'tcl', t:'TCL normal', c:'TCL' },
    { v:'other', t:'Otra marca', s:'Sony, Xiaomi, Hisense, Philips u otra', c:'Otra marca' } ]; } },
 
- { id:'conn', when:function(a){ return a.device === 'tv' && a.tvsys === 'android'; }, t:'¿Cómo está conectada hoy tu TV a internet?', h:'La "Depuración inalámbrica" solo se enciende con la TV en Wi-Fi.', opts:function(){ return [
+ { id:'boxkind', when:function(a){ return a.device === 'box'; }, t:'¿Qué TV Box tienes?', h:'Todas se conectan por HDMI. Lo que cambia es el sistema que traen.', opts:function(){ return [
+   { v:'xiaomi', t:'Xiaomi Mi Box o Mi TV Stick', s:'Traen Android TV o Google TV', c:'Xiaomi TV Box' },
+   { v:'other', t:'Otra con Google TV o Android TV', s:'Chromecast con Google TV, NVIDIA Shield, cajas de operadores y similares', c:'Caja Android TV' },
+   { v:'fire', t:'Fire TV Stick o Cube de Amazon', s:'Solo se puede limpiar, no cambiar el inicio', c:'Fire TV' } ]; } },
+
+ { id:'conn', when:function(a){ return isAndroidTv(a); }, t:'¿Cómo está conectado hoy a internet tu TV o tu caja?', h:'La "Depuración inalámbrica" solo se enciende con la TV en Wi-Fi.', opts:function(){ return [
    { v:'wifi', t:'Por Wi-Fi', c:'TV por Wi-Fi' },
    { v:'eth', t:'Por cable de red', s:'La pasaremos a Wi-Fi mientras dura el trabajo', c:'TV por cable' } ]; } },
 
- { id:'tvgoal', when:function(a){ return a.device === 'tv' && a.tvsys === 'android'; }, t:'¿Qué quieres lograr?', h:'El cambio de pantalla de inicio agrega varios pasos y herramientas extra.', opts:function(){ return [
+ { id:'tvgoal', when:function(a){ return isAndroidTv(a); }, t:'¿Qué quieres lograr?', h:'El cambio de pantalla de inicio agrega varios pasos y herramientas extra.', opts:function(){ return [
    { v:'clean', t:'Solo limpiar', s:'Quitar anuncios, rastreo y apps que no usas', c:'Solo limpiar' },
    { v:'launcher', t:'Limpiar y cambiar la pantalla de inicio', s:'Inicio limpio estilo Apple TV, con tus fotos de fondo', c:'Limpiar + inicio nuevo' } ]; } },
 
@@ -279,8 +297,8 @@ var Q = [
    { v:'mac', t:'Mac', s:'Con la app Terminal', c:'Mac' } ]; } },
 
  { id:'tools', type:'multi', min:0, t:'¿Qué tienes ya instalado en el computador?', h:'Marca lo que ya tienes. Si no sabes o no tienes nada, déjalo sin marcar y sigue.', opts:function(a){
-   var launcher = (a.device === 'tv' && a.tvsys === 'android' && a.tvgoal === 'launcher');
-   var tv = a.device === 'tv', out = [];
+   var launcher = (isAndroidTv(a) && a.tvgoal === 'launcher');
+   var tv = a.device === 'tv' || a.device === 'box', out = [];
    if (a.os === 'win'){
      if (tv){ out.push({ v:'python', t:'Python 3' }); out.push({ v:'git', t:'Git' }); }
      out.push({ v:'adb', t:'adb (herramientas de plataforma de Android)' });
@@ -418,6 +436,8 @@ function tvSteps(a){
   s.push({ id:'probar', t:'Prueba todo antes de tocar nada', b:[
     { p:'Micrófono del control, AirPlay o Chromecast, entradas HDMI, botones especiales y tus apps. Anota cómo funciona cada cosa; si algo falla después, sabrás si ya fallaba antes.' } ] });
 
+  if (a.isBox) s[0].b.push({ note:'info', tag:'Sobre las TV Box', html:'El proyecto base probó sus listas en televisores y no nombra la Mi Box; sí dice dar soporte a cualquier equipo con Android TV o Google TV. En tu caja no habrá una lista hecha para tu modelo: la armarás con sus apps activas, de a un lote por vez y con respaldo. Prueba también el control remoto, las apps de streaming y la salida HDMI.' });
+
   if (fire){
     s.push({ id:'tvdev', t:'Abre la puerta de la Fire TV', b:[
       { list:[ 'Ajustes → <strong>Mi Fire TV</strong> → <strong>Acerca de</strong>. Selecciona el nombre del dispositivo siete veces seguidas hasta ver que ya eres desarrollador.',
@@ -425,10 +445,11 @@ function tvSteps(a){
                'Anota la IP de la TV en Ajustes → Mi Fire TV → Acerca de → Red. Computador y TV deben estar en la misma red.' ] },
       { muted:'Deja la TV encendida mientras trabajas.' } ] });
   } else {
-    var items = [ 'Ajustes → Sistema → Información. Baja a <strong>Compilación</strong> y presiona OK siete veces seguidas hasta ver "Ya eres desarrollador".',
+    var items = a.isBox ? [ 'Ajustes → <strong>Preferencias del dispositivo</strong> → <strong>Acerca de</strong>. Baja a <strong>Compilación</strong> y presiona OK siete veces seguidas hasta ver "Ya eres desarrollador". Los nombres pueden variar un poco según la versión.',
+                  'Vuelve atrás: aparece <strong>Opciones para desarrolladores</strong>. Entra y enciende <strong>Depuración USB</strong>. Si ves <strong>Depuración inalámbrica</strong> o "Depuración por red", enciéndela también.' ] : [ 'Ajustes → Sistema → Información. Baja a <strong>Compilación</strong> y presiona OK siete veces seguidas hasta ver "Ya eres desarrollador".',
                   'Ajustes → Sistema → <strong>Opciones de desarrollador</strong> → Depuración USB. Si ves "Depuración por red", enciéndela también.' ];
     if (wired) items.push('Desconecta el cable de red y conecta la TV al Wi-Fi, a la <strong>misma red</strong> que tu computador (Ajustes → Red e Internet).');
-    items.push('Enciende la <strong>Depuración inalámbrica</strong> en Opciones de desarrollador. Deja la TV encendida; vamos a necesitar esa pantalla.');
+    items.push(a.isBox ? 'Anota la IP de la caja (Acerca de → Estado). Debe estar en la <strong>misma red</strong> que tu computador. Déjala encendida mientras trabajas.' : 'Enciende la <strong>Depuración inalámbrica</strong> en Opciones de desarrollador. Deja la TV encendida; vamos a necesitar esa pantalla.');
     s.push({ id:'tvdev', t:'Abre la puerta de la TV', b:[ { list:items } ] });
   }
 
@@ -441,7 +462,16 @@ function tvSteps(a){
       { p:'La primera vez la TV pregunta <strong>"¿Permitir depuración USB?"</strong>: marca <strong>Permitir siempre</strong>. Debe aparecer tu IP con la palabra "device".' },
       netNote(a) ] });
   } else {
-    var cb = pairBlocks(a, true); cb.push(netNote(a));
+    var cb;
+    if (a.isBox){
+      cb = [ { p:'Hay dos caminos según la versión de Android de la caja. Mira las Opciones para desarrolladores: si existe <strong>Depuración inalámbrica</strong>, sigue la ruta A; si solo ves <strong>Depuración por red</strong>, sigue la ruta B.' }, { h:'Ruta A: con Depuración inalámbrica' } ]
+        .concat(pairBlocks(a, true))
+        .concat([ { h:'Ruta B: con Depuración por red' },
+          { p:'No pide código de vinculación. Usa la IP de la caja.' },
+          { cmd:'adb connect ' + IP + ':5555\nadb devices' },
+          { p:'La primera vez la caja pregunta <strong>"¿Permitir depuración USB?"</strong>: marca <strong>Permitir siempre</strong>. Debe aparecer tu IP con la palabra "device".' } ]);
+    } else cb = pairBlocks(a, true);
+    cb.push(netNote(a));
     s.push({ id:'conectar', t:'Vincula el computador con la TV', b:cb });
   }
 
@@ -751,9 +781,10 @@ function renderCover(){
   f.appendChild(how);
 
   var cov = el('section', 'cover');
-  cov.appendChild(el('div', 'sec-h', '<div class="eyebrow">Qué cubre</div><h2>Dos tipos de equipo, cada uno con su cuidado.</h2>'));
+  cov.appendChild(el('div', 'sec-h', '<div class="eyebrow">Qué cubre</div><h2>Tres tipos de equipo, cada uno con su cuidado.</h2>'));
   var g2 = el('div', 'grid3');
   g2.appendChild(el('div', 'card big', '<span class="pill">Televisor</span><h3>Google TV, Android TV y Fire TV</h3><ul class="blist"><li>Quitar anuncios, rastreo y apps que no usas, por lotes y con respaldo.</li><li>Cambiar la pantalla de inicio por una limpia, con tus fotos de fondo (Google TV y Android TV).</li><li>Aviso especial para TCL tipo cuadro: el modo Frame no se toca.</li><li>Fire TV: solo limpieza.</li></ul>'));
+  g2.appendChild(el('div', 'card big', '<span class="pill">TV Box</span><h3>Xiaomi Mi Box, stick y cajas Android TV</h3><ul class="blist"><li>Mismos pasos que un televisor: limpiar apps y, si quieres, cambiar la pantalla de inicio.</li><li>Dos caminos para conectar, según la versión de Android de la caja.</li><li>Sin lista hecha para tu modelo: la armas con sus apps, de a un lote.</li><li>Fire TV Stick o Cube: solo limpieza.</li></ul>'));
   g2.appendChild(el('div', 'card big', '<span class="pill amber">Radio de auto</span><h3>Radio Android y Android Automotive</h3><ul class="blist amber"><li>Radio Android instalado aparte: desactivar apps, instalar APK o cambiar el inicio.</li><li>Android Automotive de fábrica: solo instalar apps, según lo que permita la marca.</li><li>Solo CarPlay o Android Auto: casi no hay nada que limpiar, y te lo decimos.</li><li>Siempre con el auto estacionado y de a una app, con forma de deshacer.</li></ul>'));
   cov.appendChild(g2);
   cov.appendChild(el('div', 'cover-note', '<span class="tag" style="color:var(--warn)">No sirve para</span><span>Samsung (Tizen), LG (webOS), Roku, Vizio ni Hisense VIDAA. Para esos TVs hay una guía para apagar el rastreo con el control: <a href="https://cleanyour.tv/not-android" target="_blank" rel="noopener">cleanyour.tv/not-android</a></span>'));
@@ -771,6 +802,7 @@ function setProgress(pct){ pbar.style.width = Math.max(0, Math.min(100, pct)) + 
 
 var ILL = {
   tv: '<div class="mini ill" aria-hidden="true"><div class="clk">20:48</div><div class="tiles"><i></i><i></i><i></i><i></i></div></div>',
+  box: '<div class="mini box ill" aria-hidden="true"><div class="puck"></div><div class="cab"></div></div>',
   car: '<div class="mini car ill" aria-hidden="true"><div class="tiles"><i></i><i></i><i></i><i></i></div><div class="fm"><b></b></div></div>'
 };
 function renderQuestion(q){
@@ -847,7 +879,7 @@ function renderStop(){
 
 function renderResult(){
   var frag = document.createDocumentFragment();
-  var steps = S.A.device === 'tv' ? tvSteps(S.A) : carSteps(S.A);
+  var steps = (S.A.device === 'tv' || S.A.device === 'box') ? tvSteps(normBox(S.A)) : carSteps(S.A);
   var checkable = steps.filter(function(x){ return !x.nocheck; });
   var sum = renderChips();
   var meter = el('div', 'bar'), mspan = el('span'); meter.appendChild(mspan);
