@@ -1,6 +1,6 @@
 # Limpieza TV y Radio
 
-Asistente interactivo que, según las respuestas, arma la guía paso a paso para limpiar una TV (Google TV, Android TV o Fire TV) o un radio de auto (Android o Android Automotive) desde un computador con Windows o Mac.
+Asistente interactivo que, según las respuestas, arma la guía paso a paso para limpiar una TV (Google TV, Android TV o Fire TV), un TV Box o stick, o un radio de auto (Android o Android Automotive) desde un computador con Windows o Mac.
 
 - Página única estática: `index.html` (sin dependencias ni build; solo carga tipografías de Google Fonts).
 - El avance y las respuestas de cada visitante se guardan solo en su navegador (localStorage).
