@@ -1,16 +1,13 @@
-# Guía Radio Android
+# Limpieza TV y Radio
 
-Sitio web interactivo (portada, cómo funciona, diagnóstico y guía en línea de tiempo) para mejorar la interfaz de radios Android 2 DIN. Se ingresan las características del equipo (núcleos, RAM, Android, conexión, etc.) y los pasos se ajustan solos, con ilustraciones de referencia y un resumen para compartir.
+Asistente interactivo que, según las respuestas, arma la guía paso a paso para limpiar una TV (Google TV, Android TV o Fire TV) o un radio de auto (Android o Android Automotive) desde un computador con Windows o Mac.
 
-- Sitio público: https://guia-radio-android-daniels-projects-f47730b3.vercel.app
-- Página única estática: `index.html` (sin dependencias ni build).
-- Los datos y el avance de cada visitante se guardan solo en su navegador (localStorage).
-- Las ilustraciones son esquemáticas, no capturas reales.
+- Página única estática: `index.html` (sin dependencias ni build; solo carga tipografías de Google Fonts).
+- El avance y las respuestas de cada visitante se guardan solo en su navegador (localStorage).
+- Los comandos de TV se apoyan en el proyecto abierto [CleanYourTV](https://github.com/Gathin23/cleanyourtv). Los de radio de auto usan adb estándar.
 
 ## Despliegue
 
-Proyecto Vercel `guia-radio-android` (sin framework, sin build).
+Proyecto Vercel `guia-radio-android` (sin framework, sin build). Cada cambio en `main` se publica solo.
 
-## Publicación automática
-
-Cada cambio en `main` se publica solo en Vercel.
+La versión anterior (guía de diagnóstico para radios Android 2 DIN) quedó en el historial de Git.

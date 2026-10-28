@@ -3,982 +3,741 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>document.documentElement.classList.add('js');try{var t=JSON.parse(localStorage.getItem('radio-guia-tema-v1'));if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<title>Guía Radio Android</title>
-<meta name="description" content="Ingresa las características de tu radio Android y la guía para mejorar su interfaz se ajusta sola.">
-<meta property="og:title" content="Guía Radio Android">
-<meta property="og:description" content="Ingresa las características de tu radio Android y la guía para mejorar su interfaz se ajusta sola.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="es_CL">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Limpieza TV y Radio</title>
+<meta name="description" content="Responde unas preguntas y recibe la guía paso a paso para limpiar una TV Android o un radio de auto desde Windows o Mac.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Concepto: sitio web con aire de tablero de instrumentos. Portada oscura con radio animada, secciones con scroll suave y la guía como línea de tiempo. */
-:root {
-  --bg: #E9EDEA;
-  --surface: #F6F8F6;
-  --raised: #FFFFFF;
-  --fg: #13191B;
-  --muted: #465255;
-  --line: #C6CFCB;
-  --accent: #974A00;
-  --accent-ink: #FFFFFF;
-  --accent-soft: #F2E0CB;
-  --warn: #6E5600;
-  --warn-soft: #F0E7B6;
-  --good: #1B6B3F;
-  --shadow: 0 1px 2px rgba(19,25,27,.06), 0 10px 28px -14px rgba(19,25,27,.22);
-  --nav-bg: rgba(233,237,234,.82);
-  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+/* Layout: one narrow column. A question card at a time, then a personalised checklist of steps built from the answers. Dark-first, same identity as the Clear TV tutorials. */
+:root{
+  --bg:#050b1c; --surface:#0b1630; --surface-2:#10204a; --line:#1f3266;
+  --fg:#eef3fb; --muted:#9fb0cf; --accent:#31b4e7; --accent-2:#5fd8ca;
+  --warn:#ff7700; --alert:#ea0029; --code-bg:#030814; --code-fg:#cfe9ff;
+  --display:"Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0E1315;
-    --surface: #151B1E;
-    --raised: #1B2327;
-    --fg: #E7EDEA;
-    --muted: #9AA7A6;
-    --line: #2B363A;
-    --accent: #FFB02E;
-    --accent-ink: #1A1100;
-    --accent-soft: #3A2A0E;
-    --warn: #E8CC5A;
-    --warn-soft: #352E0E;
-    --good: #5ED39A;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -14px rgba(0,0,0,.75);
-    --nav-bg: rgba(14,19,21,.82);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0E1315;
-  --surface: #151B1E;
-  --raised: #1B2327;
-  --fg: #E7EDEA;
-  --muted: #9AA7A6;
-  --line: #2B363A;
-  --accent: #FFB02E;
-  --accent-ink: #1A1100;
-  --accent-soft: #3A2A0E;
-  --warn: #E8CC5A;
-  --warn-soft: #352E0E;
-  --good: #5ED39A;
-  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -14px rgba(0,0,0,.75);
-  --nav-bg: rgba(14,19,21,.82);
-  color-scheme: dark;
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font: 16px/1.55 var(--font-body);
-  padding-block: 0;
-}
-.wrap { max-width: 1120px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px)); }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.05; margin: 0; text-wrap: balance; }
-h2 { font-size: clamp(1.9rem, 4.5vw, 2.7rem); letter-spacing: 0.005em; }
-h3 { font-size: 1.35rem; }
-p { margin: 0; }
-a { color: inherit; }
-section[id] { scroll-margin-top: 76px; }
-.sec { padding-block: clamp(48px, 8vw, 88px); }
-.sec-head { max-width: 62ch; margin-bottom: 30px; display: grid; gap: 10px; }
-.sec-head p { color: var(--muted); }
-.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; display: flex; align-items: center; gap: 10px; }
-.eyebrow::before { content: ""; width: 28px; height: 3px; border-radius: 2px; background: var(--accent); flex: none; }
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f3f6fb; --surface:#ffffff; --surface-2:#e7eef9; --line:#c9d6ec;
+  --fg:#0b1736; --muted:#4c5f80; --accent:#0a74b8; --accent-2:#11806f;
+  --warn:#b24f00; --alert:#c1001f; --code-bg:#0b1736; --code-fg:#e3f2ff; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#f3f6fb; --surface:#ffffff; --surface-2:#e7eef9; --line:#c9d6ec;
+  --fg:#0b1736; --muted:#4c5f80; --accent:#0a74b8; --accent-2:#11806f;
+  --warn:#b24f00; --alert:#c1001f; --code-bg:#0b1736; --code-fg:#e3f2ff; color-scheme:light }
 
-/* Barra de navegación */
-.nav { position: sticky; top: 0; z-index: 50; background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
-.nav-in { display: flex; align-items: center; gap: 18px; min-height: 60px; }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: .01em; flex: none; }
-.brand svg { width: 30px; height: 30px; flex: none; }
-.nav-links { display: none; gap: 4px; margin-left: auto; }
-@media (min-width: 820px) { .nav-links { display: flex; } }
-.nav-links a { text-decoration: none; font-size: 0.92rem; font-weight: 500; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: color .15s, background .15s; }
-.nav-links a:hover { color: var(--fg); background: var(--surface); }
-.nav-links a.on { color: var(--accent-ink); background: var(--accent); }
-.nav-end { display: flex; align-items: center; gap: 10px; margin-left: auto; }
-@media (min-width: 820px) { .nav-end { margin-left: 0; } }
-.nav-prog { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); background: var(--raised); border-radius: 999px; padding: 6px 12px; white-space: nowrap; text-decoration: none; }
-.nav-prog b { color: var(--accent); font-weight: 500; }
-.theme-btn { white-space: nowrap; flex: none; font: inherit; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; min-height: 44px; padding: 8px 14px; border-radius: 999px; cursor: pointer; border: 1px solid var(--line); background: var(--raised); color: var(--fg); transition: border-color .15s, transform .15s; }
-.theme-btn:hover { border-color: var(--accent); }
-.theme-btn:active { transform: scale(.97); }
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 
-/* Portada (siempre oscura, como una pantalla de auto) */
-.hero-band {
-  --bg: #0B1012; --surface: #131A1D; --raised: #1A2327; --fg: #EEF3F0; --muted: #A3B0AE; --line: #2D3A3F;
-  --accent: #FFB02E; --accent-ink: #1A1100; --accent-soft: #3A2A0E;
-  position: relative; overflow: hidden; color: var(--fg); background: var(--bg);
-  background-image:
-    radial-gradient(700px 380px at 82% 20%, rgba(255,176,46,.20), transparent 70%),
-    radial-gradient(600px 400px at 0% 100%, rgba(94,211,154,.10), transparent 70%);
-}
-.hero-band::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 48px 48px; opacity: .22; -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 75%); pointer-events: none; }
-.hero { position: relative; display: grid; gap: 36px; align-items: center; padding-block: clamp(44px, 9vw, 96px) 40px; }
-@media (min-width: 900px) { .hero { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; } }
-.hero h1 { font-size: clamp(2.8rem, 8vw, 5.2rem); font-weight: 800; letter-spacing: 0.005em; margin-top: 14px; }
-.hero h1 em { font-style: normal; color: var(--accent); }
-.hero .lede { color: var(--muted); font-size: 1.12rem; max-width: 52ch; margin-top: 18px; }
-.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; padding: 0; list-style: none; }
-.chips li { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; padding: 6px 12px; }
-.hero-art { margin: 0; position: relative; }
-.hero-art::before { content: ""; position: absolute; inset: 10% 6%; background: radial-gradient(closest-side, rgba(255,176,46,.28), transparent); filter: blur(24px); z-index: 0; }
-.hero-art svg { position: relative; z-index: 1; width: 100%; height: auto; display: block; filter: drop-shadow(0 28px 36px rgba(0,0,0,.55)); animation: float 7s ease-in-out infinite; }
-@keyframes float { 0%,100% { transform: translateY(0) rotate(-.4deg); } 50% { transform: translateY(-8px) rotate(.4deg); } }
-.eq rect { fill: var(--accent); transform-box: fill-box; transform-origin: 50% 100%; animation: eq 1.2s ease-in-out infinite; }
-.eq rect:nth-child(2) { animation-delay: -.3s; animation-duration: 1.0s; }
-.eq rect:nth-child(3) { animation-delay: -.6s; animation-duration: 1.4s; }
-.eq rect:nth-child(4) { animation-delay: -.2s; animation-duration: .9s; }
-.eq rect:nth-child(5) { animation-delay: -.8s; animation-duration: 1.3s; }
-@keyframes eq { 0%,100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
-.pulse { animation: pulse 2.4s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
-.facts { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: clamp(32px, 6vw, 56px); }
-.facts div { background: rgba(19,26,29,.92); padding: 16px 18px; }
-.facts b { display: block; font-family: var(--font-display); font-size: 2.1rem; line-height: 1; color: var(--accent); font-weight: 800; }
-.facts span { font-size: .85rem; color: var(--muted); }
+.progress{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:3px;z-index:20}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
 
-/* Botones */
-.btn {
-  font: inherit; font-weight: 600; min-height: 48px; padding: 10px 22px; border-radius: 999px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
-  transition: filter .15s, transform .15s, box-shadow .15s, border-color .15s;
-}
-.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); box-shadow: 0 10px 24px -10px var(--accent); }
-.btn.ghost { background: transparent; }
-.btn:hover { filter: brightness(1.08); }
-.btn.ghost:hover { border-color: var(--accent); filter: none; }
-.btn:active { transform: scale(.98); }
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:48px 96px;display:grid;gap:28px}
+.wrap > *{min-width:0}
 
-/* Cómo funciona */
-.how { display: grid; gap: 16px; counter-reset: how; }
-@media (min-width: 760px) { .how { grid-template-columns: repeat(3, 1fr); } }
-.how article { counter-increment: how; position: relative; background: var(--raised); border: 1px solid var(--line); border-radius: 18px; padding: 26px 24px 28px; box-shadow: var(--shadow); overflow: hidden; transition: transform .25s, border-color .25s; }
-.how article:hover { transform: translateY(-4px); border-color: var(--accent); }
-.how article::before { content: "0" counter(how); position: absolute; right: 18px; top: 4px; font-family: var(--font-display); font-weight: 800; font-size: 5rem; line-height: 1; color: var(--accent-soft); }
-.how .ico { width: 52px; height: 52px; border-radius: 14px; background: var(--accent-soft); display: grid; place-items: center; margin-bottom: 16px; position: relative; }
-.how .ico svg { width: 28px; height: 28px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.how h3 { position: relative; }
-.how p { color: var(--muted); margin-top: 8px; position: relative; }
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.eyebrow b{font-weight:500;color:var(--muted)}
+h1,h2,h3{font-family:var(--display);font-weight:300;text-wrap:balance;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(36px,6.5vw,64px);line-height:1.04}
+h2{font-size:clamp(26px,4vw,38px);line-height:1.12}
+h3{font-size:19px;font-weight:400;letter-spacing:-.01em}
+p{margin:0;max-width:65ch}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:58ch}
+.muted{color:var(--muted)}
+a{color:var(--accent)}
+strong{font-weight:600}
+ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
+.path,code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);border-radius:6px;padding:1px 7px;overflow-wrap:anywhere}
 
-/* Formulario + diagnóstico */
-.setup { display: grid; gap: 24px; }
-@media (min-width: 1000px) { .setup { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 32px; align-items: start; } .diag { position: sticky; top: 84px; } }
-.panel { background: var(--raised); border: 1px solid var(--line); border-radius: 18px; padding: 26px; min-width: 0; box-shadow: var(--shadow); }
-.panel .hint { color: var(--muted); font-size: 0.875rem; margin: 0 0 16px; }
-.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0 14px; }
-.field { display: grid; gap: 4px; margin-bottom: 14px; align-content: start; }
-.field.wide { grid-column: 1 / -1; }
-.field label { font-weight: 600; font-size: 0.9rem; }
-.field small { color: var(--muted); font-size: 0.8rem; }
-select, input[type="text"], textarea {
-  width: 100%; min-height: 46px; padding: 9px 12px; font: inherit; color: var(--fg);
-  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-  transition: border-color .15s, box-shadow .15s;
-}
-select:hover, input[type="text"]:hover, textarea:hover { border-color: var(--muted); }
-select:focus, input[type="text"]:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-select:focus-visible, input:focus-visible, textarea:focus-visible, button:focus-visible, summary:focus-visible, a:focus-visible {
-  outline: 2px solid var(--accent); outline-offset: 2px;
-}
-.group-title { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 10px 0 12px; padding-top: 14px; border-top: 1px solid var(--line); }
-#btn-reset { width: 100%; margin-top: 6px; border-radius: 12px; }
-.diag { background: var(--raised); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 18px; padding: 26px; display: grid; gap: 20px; box-shadow: var(--shadow); min-width: 0; }
-.diag-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
-.diag-head h3 { font-size: 1.8rem; }
-.diag-head .model { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); overflow-wrap: anywhere; }
-.gauge { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.seg { height: 22px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); transition: background .25s, box-shadow .25s; }
-.seg.on { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 16px -2px var(--accent); }
-.gauge-labels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.gauge-labels .cur { color: var(--fg); font-weight: 500; }
-.verdict { font-family: var(--font-display); font-size: 3.2rem; font-weight: 800; line-height: 1; color: var(--accent); }
-.lede { color: var(--muted); max-width: 62ch; }
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 0; }
-.stats div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; min-width: 0; }
-.stats dt { font-size: 0.75rem; color: var(--muted); }
-.stats dd { margin: 2px 0 0; font-family: var(--font-mono); font-size: 0.95rem; overflow-wrap: anywhere; }
-.alerts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.alerts li { display: flex; gap: 10px; align-items: baseline; font-size: 0.92rem; padding: 10px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--muted); }
-.alerts li.warn { background: var(--warn-soft); border-color: transparent; border-left-color: var(--warn); }
-.tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; flex: none; color: var(--muted); }
-.alerts li.warn .tag { color: var(--warn); }
+.head{display:grid;gap:14px}
 
-/* Guía paso a paso */
-.guide { background: var(--surface); border-block: 1px solid var(--line); }
-.progress { display: grid; gap: 10px; margin-bottom: 28px; background: var(--raised); border: 1px solid var(--line); border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow); position: sticky; top: 72px; z-index: 5; }
-.progress-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.progress-top strong { font-family: var(--font-display); font-size: 1.2rem; }
-.progress-top span { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
-.bar { height: 10px; background: var(--line); border-radius: 5px; overflow: hidden; }
-.bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--good)); border-radius: 5px; transition: width 0.35s ease; }
-.steps { display: grid; gap: 16px; position: relative; }
-.steps::before { content: ""; position: absolute; left: 38px; top: 30px; bottom: 30px; width: 2px; background: repeating-linear-gradient(var(--line) 0 6px, transparent 6px 12px); }
-details { position: relative; background: var(--raised); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
-details[open] { box-shadow: var(--shadow); }
-details.done { border-color: var(--good); }
-summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 16px; padding: 16px 20px; min-height: 68px; transition: background .15s; }
-summary:hover { background: var(--surface); }
-summary::-webkit-details-marker { display: none; }
-.num { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); background: var(--raised); display: grid; place-items: center; flex: none; transition: background .2s, color .2s; }
-details.done .num { background: var(--good); color: var(--accent-ink); border-color: var(--good); }
-.s-title { font-family: var(--font-display); font-size: 1.55rem; font-weight: 700; line-height: 1.12; flex: 1; min-width: 0; }
-.count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); flex: none; }
-summary::after { content: "+"; font-family: var(--font-mono); color: var(--muted); flex: none; width: 16px; text-align: center; }
-details[open] > summary::after { content: "−"; }
-.s-body { padding: 4px 20px 24px 78px; display: grid; gap: 18px; align-items: start; }
-@media (min-width: 900px) { .s-body.has-art { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
-@media (max-width: 640px) { .s-body { padding-left: 20px; } .steps::before { display: none; } }
-.s-main { display: grid; gap: 12px; min-width: 0; }
-.s-note { color: var(--muted); font-size: 0.92rem; }
-.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.chk { display: flex; gap: 12px; align-items: flex-start; padding: 10px 10px; border-radius: 12px; cursor: pointer; transition: background .15s; }
-.chk:hover { background: var(--surface); }
-.chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
-.chk span { min-width: 0; }
-.chk input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
-.lnk { color: var(--accent); font-weight: 600; white-space: nowrap; }
-code { font-family: var(--font-mono); font-size: 0.85em; background: var(--surface); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
-.fig { margin: 0; display: grid; gap: 6px; min-width: 0; }
-@media (max-width: 899px) { .fig { order: -1; } }
-.fig figcaption { font-size: 0.8rem; color: var(--muted); }
-.ill { width: 100%; height: auto; display: block; border-radius: 12px; }
-.ill text { font-family: var(--font-body); font-size: 13px; fill: var(--fg); }
-.ill .mu { fill: var(--muted); font-size: 11.5px; }
-.ill .b { font-weight: 600; }
-.ill .sm { font-size: 12px; }
-.ill .bg { fill: var(--surface); stroke: var(--line); }
-.ill .pn { fill: var(--raised); stroke: var(--line); }
-.ill .hl { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
-.ill .ln { stroke: var(--line); fill: none; }
-.ill .ar { stroke: var(--accent); stroke-width: 1.5; fill: none; }
-.ill .acf { fill: var(--accent); }
-.ill .inv { fill: var(--accent-ink); }
-.ill .sky { fill: var(--accent-soft); }
+.qcard{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:clamp(18px,3vw,30px);display:grid;gap:18px}
+.qmeta{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:26px 1fr;gap:2px 12px;align-items:start;text-align:left;width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:12px;padding:14px 16px;font:inherit;cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible,a:focus-visible,.chip:focus-visible,.cmd button:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.opt .mark{grid-row:1 / span 2;width:20px;height:20px;margin-top:3px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center;font-size:12px;line-height:1}
+.opt.multi .mark{border-radius:5px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface-2))}
+.opt[aria-pressed="true"] .mark{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.opt .ot{font-weight:500}
+.opt .os{color:var(--muted);font-size:14px;grid-column:2}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:999px;padding:9px 18px;font:inherit;font-size:15px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
 
-/* Resumen */
-.share { position: relative; overflow: hidden; background: var(--raised); border: 1px solid var(--line); border-radius: 22px; padding: clamp(22px, 4vw, 40px); display: grid; gap: 14px; box-shadow: var(--shadow); }
-.share::before { content: ""; position: absolute; right: -80px; top: -80px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(closest-side, var(--accent-soft), transparent); pointer-events: none; }
-.share > * { position: relative; }
-.share textarea { min-height: 140px; font-family: var(--font-mono); font-size: 0.85rem; resize: vertical; }
-.share-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.live { color: var(--good); font-size: 0.9rem; min-height: 1.4em; }
-.foot { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
-.site-foot { border-top: 1px solid var(--line); padding-block: 32px 44px; display: grid; gap: 14px; }
-.site-foot .brand { font-size: 1.15rem; }
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip:hover{border-color:var(--accent)}
 
-/* Animación al hacer scroll */
-.js .rv { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; transition-delay: var(--d, 0s); }
-.js .rv.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .js .rv { opacity: 1; transform: none; transition: none; }
-  .hero-art svg, .eq rect, .pulse { animation: none; }
-  .bar > i, .seg, .btn, .theme-btn, details, summary, .chk, select, input, textarea, .how article { transition: none; }
-}
+.sum{display:grid;gap:12px;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:18px 20px}
+.bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
+
+.step{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:clamp(16px,3vw,26px);display:grid;gap:14px}
+.step.done{opacity:.55}
+.step .sh{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:center}
+.step .num{font-family:var(--display);font-size:19px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--accent)}
+.step .sb{display:grid;gap:12px}
+.step .sb > *{min-width:0}
+.donelbl{display:flex;gap:10px;align-items:center;font-size:15px;color:var(--muted);cursor:pointer;width:max-content}
+.donelbl input{width:18px;height:18px;accent-color:var(--accent)}
+
+.cmd{position:relative;background:var(--code-bg);color:var(--code-fg);border-radius:10px;border:1px solid var(--line);display:flex;align-items:stretch;min-width:0}
+.cmd pre{margin:0;padding:12px 14px;font-family:var(--mono);font-size:14px;line-height:1.55;overflow-x:auto;flex:1;min-width:0;white-space:pre}
+.cmd button{flex:none;border:0;border-left:1px solid #1f3266;background:transparent;color:#9fd6f3;font-family:var(--mono);font-size:12px;padding:0 14px;cursor:pointer;border-radius:0 10px 10px 0}
+.cmd button:hover{background:#0f2147}
+
+.note{border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+.note.warn{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.note.warn .tag{color:var(--warn)}
+.note.alert{border-color:color-mix(in srgb,var(--alert) 55%,var(--line))}
+.note.alert .tag{color:var(--alert)}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--surface)}
+tr:last-child td{border-bottom:0}
+td code{font-size:.85em}
 </style>
 </head>
 <body>
-<header class="nav">
-  <div class="wrap nav-in">
-    <a class="brand" href="#inicio" aria-label="Guía Radio Android, inicio">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="6" width="30" height="20" rx="5" fill="var(--accent)"/><rect x="6" y="10" width="20" height="12" rx="2" fill="var(--accent-ink)" opacity=".85"/><circle cx="3.5" cy="16" r="1.4" fill="var(--accent-ink)"/><circle cx="28.5" cy="16" r="1.4" fill="var(--accent-ink)"/></svg>
-      <span>Guía Radio Android</span>
-    </a>
-    <nav class="nav-links" aria-label="Secciones">
-      <a href="#como" data-sec="como">Cómo funciona</a>
-      <a href="#radio" data-sec="radio">Tu radio</a>
-      <a href="#guia" data-sec="guia">La guía</a>
-      <a href="#compartir" data-sec="compartir">Compartir</a>
-    </nav>
-    <div class="nav-end">
-      <a class="nav-prog" href="#guia" aria-label="Ir a tu avance">Avance <b id="nav-pct">0%</b></a>
-      <button type="button" class="theme-btn" id="btn-theme" aria-label="Cambiar entre tema claro y oscuro">◐ Tema</button>
-    </div>
-  </div>
-</header>
 
-<div class="hero-band" id="inicio">
-  <div class="wrap">
-    <header class="hero">
-      <div>
-        <p class="eyebrow">Radio 2 DIN con Android Auto</p>
-        <h1>Dale a tu radio la <em>interfaz</em> que se merece</h1>
-        <p class="lede">Cuéntanos qué hardware tiene tu radio y la guía se ajusta sola: qué launcher probar, cuántos widgets poner y cómo hacer que Android Auto abra al encender el auto.</p>
-        <div class="cta">
-          <a class="btn primary" href="#radio">Empezar ahora →</a>
-          <a class="btn ghost" href="#como">Ver cómo funciona</a>
-        </div>
-        <ul class="chips">
-          <li>Sin instalar nada</li>
-          <li>Gratis</li>
-          <li>Tu avance se guarda</li>
-        </ul>
-      </div>
-      <figure class="hero-art">
-        <svg class="ill" viewBox="0 0 460 290" role="img" aria-label="Radio de auto doble DIN con pantalla táctil, tarjetas de inicio y un ecualizador animado">
-          <rect class="bg" x="6" y="30" width="448" height="230" rx="22"/>
-          <rect class="pn" x="6" y="30" width="448" height="230" rx="22"/>
-          <circle class="bg" cx="38" cy="145" r="20"/><circle class="ln" cx="38" cy="145" r="12"/><line class="ar" x1="38" y1="145" x2="38" y2="134"/>
-          <circle class="bg" cx="422" cy="145" r="20"/><circle class="ln" cx="422" cy="145" r="12"/><line class="ar" x1="422" y1="145" x2="430" y2="138"/>
-          <rect x="72" y="46" width="316" height="198" rx="12" fill="#070B0D" stroke="var(--line)"/>
-          <text x="88" y="72" style="font-family:var(--font-mono);font-size:15px;fill:var(--fg)">18:42</text>
-          <text x="372" y="72" text-anchor="end" style="font-size:11px;fill:var(--muted)">Android Auto listo</text>
-          <circle class="acf pulse" cx="378" cy="68" r="3.5"/>
-          <rect class="pn" x="88" y="86" width="108" height="64" rx="9"/>
-          <text class="b sm" x="100" y="108">Música</text>
-          <g class="eq" transform="translate(100 118)"><rect x="0" y="0" width="7" height="24" rx="2"/><rect x="12" y="0" width="7" height="24" rx="2"/><rect x="24" y="0" width="7" height="24" rx="2"/><rect x="36" y="0" width="7" height="24" rx="2"/><rect x="48" y="0" width="7" height="24" rx="2"/></g>
-          <rect class="hl" x="206" y="86" width="86" height="64" rx="9"/>
-          <text class="b sm" x="249" y="125" text-anchor="middle">Android Auto</text>
-          <rect class="pn" x="302" y="86" width="72" height="64" rx="9"/>
-          <text class="b sm" x="338" y="125" text-anchor="middle">Mapas</text>
-          <rect class="pn" x="88" y="160" width="76" height="64" rx="9"/>
-          <text class="b sm" x="126" y="198" text-anchor="middle">Teléfono</text>
-          <rect class="pn" x="174" y="160" width="76" height="64" rx="9"/>
-          <text class="b sm" x="212" y="198" text-anchor="middle">Apps</text>
-          <rect class="pn" x="260" y="160" width="114" height="64" rx="9"/>
-          <text class="mu" x="272" y="182" style="font-size:10.5px">OBD2 · 62 km/h</text>
-          <rect class="ln" x="272" y="194" width="90" height="6" rx="3"/>
-          <rect class="acf" x="272" y="194" width="58" height="6" rx="3"/>
-          <rect x="196" y="12" width="68" height="8" rx="4" fill="var(--line)"/>
-        </svg>
-      </figure>
-    </header>
-    <div class="facts" aria-label="La guía en cifras">
-      <div><b>8</b><span>pasos guiados</span></div>
-      <div><b>3</b><span>niveles de hardware</span></div>
-      <div><b>11</b><span>datos que ajustan la guía</span></div>
-      <div><b>0</b><span>cuentas ni registros</span></div>
-    </div>
-  </div>
-</div>
-
-<main>
-  <section class="sec" id="como" aria-labelledby="como-t">
-    <div class="wrap">
-      <div class="sec-head rv">
-        <p class="eyebrow">Cómo funciona</p>
-        <h2 id="como-t">Tres pasos y tu radio queda lista</h2>
-        <p>No es una guía genérica: cada recomendación depende del procesador, la memoria y la versión de Android de tu equipo.</p>
-      </div>
-      <div class="how">
-        <article class="rv">
-          <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h6M7 14h10"/></svg></div>
-          <h3>Ingresa los datos</h3>
-          <p>Núcleos, RAM, versión de Android y cómo conectas tu celular. Si no sabes alguno, la guía te dice dónde verlo.</p>
-        </article>
-        <article class="rv" style="--d:.1s">
-          <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/></svg></div>
-          <h3>Mira tu diagnóstico</h3>
-          <p>Un medidor te dice si tu radio es liviana, media u holgada, y qué cuidar para que siga fluida.</p>
-        </article>
-        <article class="rv" style="--d:.2s">
-          <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-          <h3>Sigue tus pasos</h3>
-          <p>Una lista con ilustraciones, hecha a la medida de tu equipo. Marca lo que ya hiciste: tu avance queda guardado.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="radio" aria-labelledby="radio-t" style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head rv">
-        <p class="eyebrow">Paso previo</p>
-        <h2 id="radio-t">Cuéntanos de tu radio</h2>
-        <p>Los valores iniciales salen de la ficha publicada de una radio Carlaoer de 9 pulgadas y 4 núcleos. Cámbialos por los de tu equipo y mira cómo cambia el diagnóstico al instante.</p>
-      </div>
-      <div class="setup">
-        <aside class="panel rv" aria-label="Datos de tu radio">
-          <div class="fields">
-            <div class="field wide">
-              <label for="f-model">Marca y modelo</label>
-              <input type="text" id="f-model" maxlength="60" autocomplete="off">
-            </div>
-            <div class="field wide">
-              <label for="f-screen">Pantalla</label>
-              <select id="f-screen">
-                <option value="7">7 pulgadas</option>
-                <option value="9">9 pulgadas</option>
-                <option value="10">10 pulgadas</option>
-              </select>
-            </div>
-
-            <p class="group-title">Hardware real (paso 1)</p>
-            <div class="field">
-              <label for="f-cores">Núcleos del procesador</label>
-              <select id="f-cores">
-                <option value="4">4 núcleos</option>
-                <option value="8">8 núcleos</option>
-                <option value="?">Aún no lo sé</option>
-              </select>
-              <small>CPU-Z o Device Info HW lo muestran.</small>
-            </div>
-            <div class="field">
-              <label for="f-ram">RAM real</label>
-              <select id="f-ram">
-                <option value="1">1 GB</option>
-                <option value="2">2 GB</option>
-                <option value="3">3 GB</option>
-                <option value="4">4 GB</option>
-                <option value="6">6 GB o más</option>
-                <option value="?">Aún no lo sé</option>
-              </select>
-              <small>La ficha puede decir más de lo que el equipo trae.</small>
-            </div>
-            <div class="field wide">
-              <label for="f-android">Versión de Android</label>
-              <select id="f-android">
-                <option value="7">7 o anterior</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13 o superior</option>
-                <option value="?">Aún no lo sé</option>
-              </select>
-              <small>Ajustes &gt; Acerca del dispositivo.</small>
-            </div>
-
-            <p class="group-title">Software y conexión</p>
-            <div class="field">
-              <label for="f-play">¿Tiene Google Play?</label>
-              <select id="f-play">
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-                <option value="?">Aún no lo sé</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="f-dev">Opciones de desarrollador</label>
-              <select id="f-dev">
-                <option value="si">Ya puedo entrar</option>
-                <option value="no">No aparecen</option>
-                <option value="?">Aún no lo he probado</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="f-link">Cómo conectas Android Auto</label>
-              <select id="f-link">
-                <option value="cable">Por cable USB</option>
-                <option value="wifi">Inalámbrico</option>
-                <option value="?">Aún no lo sé</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="f-proj">App de proyección de la radio</label>
-              <select id="f-proj">
-                <option value="zlink">ZLink</option>
-                <option value="carlink">Carlink</option>
-                <option value="otra">Otra</option>
-                <option value="?">Aún no lo sé</option>
-              </select>
-            </div>
-            <div class="field wide">
-              <label for="f-obd">Datos del auto (OBD2)</label>
-              <select id="f-obd">
-                <option value="tengo">Ya tengo un adaptador</option>
-                <option value="quiero">Quiero comprar uno</option>
-                <option value="no">No por ahora</option>
-              </select>
-            </div>
-          </div>
-          <button type="button" class="btn" id="btn-reset">Volver a los datos iniciales</button>
-        </aside>
-
-        <section class="diag rv" aria-labelledby="diag-title" style="--d:.1s">
-          <div class="diag-head">
-            <h3 id="diag-title">Diagnóstico</h3>
-            <span class="model" id="d-model"></span>
-          </div>
-          <div>
-            <div class="gauge" aria-hidden="true"><div class="seg" id="g0"></div><div class="seg" id="g1"></div><div class="seg" id="g2"></div></div>
-            <div class="gauge-labels" aria-hidden="true"><span id="gl0">Liviano</span><span id="gl1">Medio</span><span id="gl2">Holgado</span></div>
-          </div>
-          <div>
-            <p class="verdict" id="d-verdict"></p>
-            <p class="lede" id="d-text" style="margin-top:6px"></p>
-          </div>
-          <dl class="stats" id="d-stats"></dl>
-          <ul class="alerts" id="d-alerts"></ul>
-          <a class="btn primary" href="#guia" style="justify-self:start">Ver mi guía →</a>
-        </section>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec guide" id="guia" aria-labelledby="guia-t">
-    <div class="wrap">
-      <div class="sec-head rv">
-        <p class="eyebrow">Tu guía</p>
-        <h2 id="guia-t">Paso a paso, a la medida de tu equipo</h2>
-        <p>Abre cada paso, sigue las tareas y márcalas. Si cambias algún dato arriba, esta lista se reajusta sola.</p>
-      </div>
-      <section class="progress" aria-label="Avance">
-        <div class="progress-top"><strong>Tu avance</strong><span id="p-text"></span></div>
-        <div class="bar" role="progressbar" aria-label="Avance de la guía" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="p-bar"><i id="p-fill"></i></div>
-      </section>
-      <div class="steps" id="steps"></div>
-    </div>
-  </section>
-
-  <section class="sec" id="compartir" aria-labelledby="share-title">
-    <div class="wrap">
-      <div class="share rv">
-        <p class="eyebrow">Pide una mano</p>
-        <h2 id="share-title">Resumen para compartir</h2>
-        <p class="foot">Copia este texto para pegarlo en un grupo o pedir ayuda con tu radio.</p>
-        <textarea id="summary" readonly aria-label="Resumen de tu radio"></textarea>
-        <div class="share-row">
-          <button type="button" class="btn primary" id="btn-copy">Copiar resumen</button>
-          <span class="live" id="live" role="status"></span>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="wrap site-foot">
-  <a class="brand" href="#inicio"><span>Guía Radio Android</span></a>
-  <p class="foot">Los nombres de los menús cambian según el firmware de cada radio. Las cantidades de widgets y las escalas de animación son sugerencias para el nivel de tu equipo, no valores oficiales. Confirma precios y funciones de las apps en su ficha antes de instalarlas. Las ilustraciones son esquemáticas, no capturas reales.</p>
-  <p class="foot">Tus datos y tu avance se guardan solo en este navegador.</p>
-</footer>
+<div class="progress" aria-hidden="true"><span id="pbar"></span></div>
+<main class="wrap" id="app"></main>
 
 <script>
-(function () {
-  var KEY_P = 'radio-guia-perfil-v1', KEY_C = 'radio-guia-checks-v1', KEY_T = 'radio-guia-tema-v1';
-  var DEFAULT = { model: 'Carlaoer 2 DIN 9"', screen: '9', cores: '4', ram: '?', android: '?', play: '?', link: '?', proj: '?', dev: '?', obd: 'no' };
-  var IDS = Object.keys(DEFAULT);
+(function(){
+'use strict';
+var KEY = 'limpieza-tv-radio-v1';
+var IP = '192.168.1.50';
 
-  function read(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
-  function write(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-
-  var profile = Object.assign({}, DEFAULT, read(KEY_P) || {});
-  var checks = read(KEY_C) || {};
-  var closed = {};
-
-  var $ = function (id) { return document.getElementById(id); };
-  var stepsEl = $('steps');
-
-  function num(v) { return v === '?' ? null : Number(v); }
-
-  function tier(p) {
-    var r = num(p.ram);
-    if (p.cores === '?' && r === null) {
-      return { key: 'pend', idx: -1, label: 'Faltan datos', text: 'Faltan los núcleos y la RAM reales. Mientras tanto, la guía usa recomendaciones prudentes.' };
-    }
-    if (p.cores === '4' || (r !== null && r <= 2)) {
-      return { key: 'liviano', idx: 0, label: 'Liviano', text: 'Equipo modesto. Conviene priorizar la fluidez: pocos widgets, fondo estático y un launcher simple.' };
-    }
-    if (p.cores === '8' && r !== null && r >= 4) {
-      return { key: 'holgado', idx: 2, label: 'Holgado', text: 'Equipo con margen. Aun así, mantén la interfaz sencilla para usarla conduciendo.' };
-    }
-    return { key: 'medio', idx: 1, label: 'Medio', text: 'Equipo intermedio. Puedes personalizar con moderación, probando un cambio a la vez.' };
+/* ---------- helpers ---------- */
+function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function mkCmd(text){
+  var d = el('div', 'cmd'), pre = el('pre'), b = el('button'); pre.textContent = text;
+  b.type = 'button'; b.textContent = 'Copiar'; b.setAttribute('aria-label', 'Copiar comando');
+  b.addEventListener('click', function(){
+    function selectIt(){ var r = document.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Seleccionado'; }
+    function done(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1600); }
+    try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, selectIt); else selectIt(); } catch (e) { selectIt(); }
+  });
+  d.appendChild(pre); d.appendChild(b); return d;
+}
+function mkBlock(b){
+  if (b.p) return el('p', null, b.p);
+  if (b.muted) return el('p', 'muted', b.muted);
+  if (b.h) return el('h3', null, b.h);
+  if (b.cmd) return mkCmd(b.cmd);
+  if (b.list){ var ul = el('ul', 'plain'); b.list.forEach(function(x){ ul.appendChild(el('li', null, x)); }); return ul; }
+  if (b.note){ var n = el('div', 'note ' + (b.note === 'info' ? '' : b.note)); n.appendChild(el('span', 'tag', b.tag || '')); n.appendChild(el('p', null, b.html)); return n; }
+  if (b.table){
+    var w = el('div', 'table-wrap'), t = el('table'), th = el('thead'), tr = el('tr');
+    b.table.head.forEach(function(h){ tr.appendChild(el('th', null, h)); }); th.appendChild(tr); t.appendChild(th);
+    var tb = el('tbody'); b.table.rows.forEach(function(r){ var x = el('tr'); r.forEach(function(c){ x.appendChild(el('td', null, c)); }); tb.appendChild(x); });
+    t.appendChild(tb); w.appendChild(t); return w;
   }
+  return el('span');
+}
 
-  function alerts(p) {
-    var out = [];
-    var r = num(p.ram), a = num(p.android);
-    if (p.cores === '?') out.push({ k: 'info', t: 'Falta confirmar los núcleos del procesador.' });
-    if (p.ram === '?') out.push({ k: 'info', t: 'Falta confirmar la RAM real. La ficha de este tipo de radios suele ser ambigua.' });
-    if (p.android === '?') out.push({ k: 'info', t: 'Falta confirmar la versión real de Android en Ajustes.' });
-    if (p.cores === '4' && a !== null && a >= 12) out.push({ k: 'warn', t: 'Android 12 o superior en una radio económica de 4 núcleos es poco habitual. Confirma la versión real en Ajustes.' });
-    if (p.cores === '4' && r !== null && r >= 4) out.push({ k: 'warn', t: 'Con 4 núcleos, aunque la ficha diga 4 GB de RAM, mantén todo liviano.' });
-    if (r !== null && r <= 1) out.push({ k: 'warn', t: 'Con 1 GB de RAM usa el launcher original y evita widgets pesados.' });
-    if (a !== null && a <= 7) out.push({ k: 'warn', t: 'En Android 7 o anterior, muchas apps actuales piden una versión más nueva. Revisa los requisitos en la ficha de cada app.' });
-    return out;
+/* ---------- preguntas ---------- */
+var Q = [
+ { id:'device', t:'¿Qué quieres limpiar?', h:'Elige uno. Si tienes los dos, termina con uno y vuelve a empezar con el otro.', opts:function(){ return [
+   { v:'tv', t:'Un televisor', s:'Google TV, Android TV o Fire TV', c:'Televisor' },
+   { v:'car', t:'Un radio de auto', s:'La pantalla del tablero: Android, Android Automotive, CarPlay o Android Auto', c:'Radio de auto' } ]; } },
+
+ { id:'tvsys', when:function(a){ return a.device === 'tv'; }, t:'¿Qué sistema tiene tu TV?', h:'Se ve en el menú de inicio o en Ajustes → Sistema → Información.', opts:function(){ return [
+   { v:'android', t:'Google TV o Android TV', s:'TCL, Sony, Xiaomi, Hisense con Google, Philips y más', c:'Google TV / Android TV' },
+   { v:'fire', t:'Fire TV', s:'Amazon Fire TV o televisor con Fire OS. Solo se puede limpiar, no cambiar el inicio', c:'Fire TV' },
+   { v:'other', t:'Samsung, LG, Roku, Vizio o Hisense VIDAA', s:'Estos sistemas no usan adb', c:'TV no Android', stop:'tv-other' },
+   { v:'unknown', t:'No sé cuál es', s:'Te ayudo a averiguarlo', c:'Sistema desconocido', stop:'tv-unknown' } ]; } },
+
+ { id:'brand', when:function(a){ return a.device === 'tv' && a.tvsys === 'android'; }, t:'¿De qué marca es?', h:'Algunas marcas necesitan cuidados especiales.', opts:function(){ return [
+   { v:'tclframe', t:'TCL tipo cuadro (Frame)', s:'Modo arte: hay un servicio que no se debe apagar', c:'TCL Frame' },
+   { v:'tcl', t:'TCL normal', c:'TCL' },
+   { v:'other', t:'Otra marca', s:'Sony, Xiaomi, Hisense, Philips u otra', c:'Otra marca' } ]; } },
+
+ { id:'conn', when:function(a){ return a.device === 'tv' && a.tvsys === 'android'; }, t:'¿Cómo está conectada hoy tu TV a internet?', h:'La "Depuración inalámbrica" solo se enciende con la TV en Wi-Fi.', opts:function(){ return [
+   { v:'wifi', t:'Por Wi-Fi', c:'TV por Wi-Fi' },
+   { v:'eth', t:'Por cable de red', s:'La pasaremos a Wi-Fi mientras dura el trabajo', c:'TV por cable' } ]; } },
+
+ { id:'tvgoal', when:function(a){ return a.device === 'tv' && a.tvsys === 'android'; }, t:'¿Qué quieres lograr?', h:'El cambio de pantalla de inicio agrega varios pasos y herramientas extra.', opts:function(){ return [
+   { v:'clean', t:'Solo limpiar', s:'Quitar anuncios, rastreo y apps que no usas', c:'Solo limpiar' },
+   { v:'launcher', t:'Limpiar y cambiar la pantalla de inicio', s:'Inicio limpio estilo Apple TV, con tus fotos de fondo', c:'Limpiar + inicio nuevo' } ]; } },
+
+ { id:'cartype', when:function(a){ return a.device === 'car'; }, t:'¿Qué tipo de radio tienes?', h:'Elige la opción que más se parezca. Si dudas, elige la última.', opts:function(){ return [
+   { v:'aftermarket', t:'Radio Android instalado después de comprar el auto', s:'Pantalla grande tipo tablet, con Play Store o ajustes de Android (marcas como Xtrons, Eonon, Erisin)', c:'Radio Android' },
+   { v:'aaos', t:'Auto con Android Automotive de fábrica', s:'Volvo, Polestar, GM, Renault y similares, con Google integrado', c:'Android Automotive' },
+   { v:'phoneonly', t:'Solo CarPlay o Android Auto', s:'El radio solo muestra lo que viene del celular', c:'CarPlay / Android Auto', stop:'car-phone' },
+   { v:'unknown', t:'No sé cuál es', s:'Te ayudo a averiguarlo', c:'Radio desconocido', stop:'car-unknown' } ]; } },
+
+ { id:'carlink', when:function(a){ return a.device === 'car' && (a.cartype === 'aftermarket' || a.cartype === 'aaos'); }, t:'¿Cómo piensas conectar el radio al computador?', h:'Depende de la versión de Android del radio.', opts:function(){ return [
+   { v:'wifi', t:'Por Wi-Fi', s:'Si en Opciones de desarrollador existe "Depuración inalámbrica" (Android 11 o más nuevo)', c:'Conexión Wi-Fi' },
+   { v:'usb', t:'Por cable USB', s:'Si el radio es más antiguo o no tiene depuración inalámbrica', c:'Conexión USB' },
+   { v:'unknown', t:'No sé', s:'La guía te dice cómo comprobarlo y te da las dos rutas', c:'Conexión: por comprobar' } ]; } },
+
+ { id:'cargoal', type:'multi', min:1, when:function(a){ return a.device === 'car' && a.cartype === 'aftermarket'; }, t:'¿Qué quieres hacer?', h:'Puedes marcar más de uno. Cada opción agrega sus pasos.', opts:function(){ return [
+   { v:'apps', t:'Desactivar apps y promociones que no uso', s:'Siempre de una en una y con forma de deshacer', c:'Desactivar apps' },
+   { v:'install', t:'Instalar apps desde un archivo APK', c:'Instalar apps' },
+   { v:'launcher', t:'Cambiar la pantalla de inicio por otra táctil', s:'Sin desactivar la original', c:'Cambiar inicio' } ]; } },
+
+ { id:'os', t:'¿Qué computador vas a usar?', h:'Los comandos cambian según el sistema.', opts:function(){ return [
+   { v:'win', t:'Notebook o PC con Windows', s:'Windows 10 u 11, con PowerShell', c:'Windows' },
+   { v:'mac', t:'Mac', s:'Con la app Terminal', c:'Mac' } ]; } },
+
+ { id:'tools', type:'multi', min:0, t:'¿Qué tienes ya instalado en el computador?', h:'Marca lo que ya tienes. Si no sabes o no tienes nada, déjalo sin marcar y sigue.', opts:function(a){
+   var launcher = (a.device === 'tv' && a.tvsys === 'android' && a.tvgoal === 'launcher');
+   var tv = a.device === 'tv', out = [];
+   if (a.os === 'win'){
+     if (tv){ out.push({ v:'python', t:'Python 3' }); out.push({ v:'git', t:'Git' }); }
+     out.push({ v:'adb', t:'adb (herramientas de plataforma de Android)' });
+     if (launcher) out.push({ v:'studio', t:'Android Studio' });
+   } else {
+     out.push({ v:'brew', t:'Homebrew' });
+     out.push({ v:'adb', t:'adb (herramientas de plataforma de Android)' });
+     if (launcher) out.push({ v:'jdk', t:'Java 17 y herramientas de línea de comandos de Android' });
+   }
+   return out; } }
+];
+
+/* ---------- estado ---------- */
+var S = { A:{}, hist:[], view:'device', done:{} };
+try { var raw = localStorage.getItem(KEY); if (raw){ var p = JSON.parse(raw); if (p && p.A && p.hist && p.view){ S = p; if (!S.done) S.done = {}; } } } catch (e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+function qById(id){ for (var i = 0; i < Q.length; i++) if (Q[i].id === id) return Q[i]; return null; }
+function applies(q){ return !q.when || q.when(S.A); }
+function stopKey(){
+  for (var i = 0; i < Q.length; i++){
+    var q = Q[i]; if (!applies(q) || q.type === 'multi' || !(q.id in S.A)) continue;
+    var o = q.opts(S.A).filter(function(x){ return x.v === S.A[q.id]; })[0];
+    if (o && o.stop) return o.stop;
   }
+  return null;
+}
+function nextView(){
+  if (stopKey()) return 'STOP';
+  for (var i = 0; i < Q.length; i++){ if (applies(Q[i]) && !(Q[i].id in S.A)) return Q[i].id; }
+  return 'DONE';
+}
+function answer(q, value){
+  var idx = Q.indexOf(q);
+  S.A[q.id] = value;
+  for (var i = idx + 1; i < Q.length; i++) delete S.A[Q[i].id];
+  S.hist.push(q.id); S.done = {};
+  S.view = nextView(); save(); render(true);
+}
+function back(){
+  if (!S.hist.length) return;
+  S.view = S.hist.pop(); save(); render(true);
+}
+function gotoQ(id){
+  var i = S.hist.indexOf(id); if (i > -1) S.hist = S.hist.slice(0, i);
+  S.view = id; save(); render(true);
+}
+function restart(){ S = { A:{}, hist:[], view:'device', done:{} }; save(); render(true); }
 
-  function projName(p) {
-    return { zlink: 'ZLink', carlink: 'Carlink', otra: 'la app de proyección de tu radio', '?': 'la app de proyección de tu radio' }[p.proj];
-  }
+function chipText(q){
+  var v = S.A[q.id], opts = q.opts(S.A);
+  if (q.type === 'multi'){ if (!v || !v.length) return 'Nada marcado'; return v.map(function(x){ var o = opts.filter(function(y){ return y.v === x; })[0]; return o ? (o.c || o.t) : x; }).join(', '); }
+  var o = opts.filter(function(y){ return y.v === v; })[0]; return o ? (o.c || o.t) : v;
+}
 
-  var OPEN = '<svg class="ill" viewBox="0 0 520 ';
-  var BG = '<rect class="bg" x="0.5" y="0.5" width="519" height="';
-  var ART = {
-    s1: OPEN + '220" role="img" aria-label="Dos lugares donde ver los datos reales: Ajustes y CPU-Z">' + BG + '219" rx="8"/>' +
-      '<rect class="pn" x="16" y="16" width="234" height="188" rx="8"/>' +
-      '<text class="b sm" x="28" y="40">Ajustes &gt; Acerca del dispositivo</text>' +
-      '<rect class="bg" x="28" y="56" width="210" height="32" rx="6"/><text x="40" y="76">Modelo</text><text class="mu" x="226" y="76" text-anchor="end">···</text>' +
-      '<rect class="bg" x="28" y="96" width="210" height="32" rx="6"/><text x="40" y="116">Versión de Android</text><text class="mu" x="226" y="116" text-anchor="end">···</text>' +
-      '<rect class="hl" x="28" y="136" width="210" height="32" rx="6"/><text x="40" y="156">Número de compilación</text>' +
-      '<rect class="pn" x="270" y="16" width="234" height="188" rx="8"/>' +
-      '<text class="b sm" x="282" y="40">CPU-Z o Device Info HW</text>' +
-      '<rect class="bg" x="282" y="56" width="210" height="32" rx="6"/><text x="294" y="76">Procesador</text><text class="mu" x="480" y="76" text-anchor="end">···</text>' +
-      '<rect class="bg" x="282" y="96" width="210" height="32" rx="6"/><text x="294" y="116">Núcleos</text><text class="mu" x="480" y="116" text-anchor="end">···</text>' +
-      '<rect class="bg" x="282" y="136" width="210" height="32" rx="6"/><text x="294" y="156">RAM real</text><text class="mu" x="480" y="156" text-anchor="end">···</text>' +
-      '</svg>',
-    s2: OPEN + '220" role="img" aria-label="Interruptores de apps desconocidas y depuración USB">' + BG + '219" rx="8"/>' +
-      '<rect class="pn" x="16" y="16" width="488" height="188" rx="8"/>' +
-      '<text class="b sm" x="28" y="40">Ajustes</text>' +
-      '<rect class="bg" x="28" y="52" width="464" height="40" rx="6"/><text x="44" y="77">Instalar apps desconocidas</text>' +
-      '<rect class="acf" x="436" y="60" width="44" height="24" rx="12"/><circle class="inv" cx="468" cy="72" r="9"/>' +
-      '<rect class="bg" x="28" y="100" width="464" height="40" rx="6"/><text x="44" y="125">Depuración USB</text>' +
-      '<rect class="acf" x="436" y="108" width="44" height="24" rx="12"/><circle class="inv" cx="468" cy="120" r="9"/>' +
-      '<rect class="hl" x="28" y="148" width="464" height="40" rx="6"/><text x="44" y="173">Número de compilación</text><text class="mu" x="476" y="173" text-anchor="end">toca varias veces</text>' +
-      '</svg>',
-    s3: OPEN + '220" role="img" aria-label="Tres tipos de launcher para probar de a uno">' + BG + '219" rx="8"/>' +
-      '<rect class="hl" x="16" y="24" width="148" height="150" rx="8"/>' +
-      '<rect class="pn" x="186" y="24" width="148" height="150" rx="8"/>' +
-      '<rect class="pn" x="356" y="24" width="148" height="150" rx="8"/>' +
-      [16, 186, 356].map(function (x) {
-        return '<rect class="bg" x="' + (x + 16) + '" y="40" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 52) + '" y="40" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 88) + '" y="40" width="28" height="28" rx="6"/>' +
-          '<rect class="bg" x="' + (x + 16) + '" y="76" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 52) + '" y="76" width="28" height="28" rx="6"/><rect class="bg" x="' + (x + 88) + '" y="76" width="28" height="28" rx="6"/>';
-      }).join('') +
-      '<text class="b" x="30" y="132">Original</text><text class="mu" x="30" y="152">Lo más seguro</text>' +
-      '<text class="b" x="200" y="132">Nova Launcher</text><text class="mu" x="200" y="152">Más ajustes</text>' +
-      '<text class="b" x="370" y="132">De auto</text><text class="mu" x="370" y="152">Más widgets</text>' +
-      '<text class="mu" x="260" y="204" text-anchor="middle">Prueba uno a la vez y conserva el que vaya fluido</text>' +
-      '</svg>',
-    s4: OPEN + '240" role="img" aria-label="Pantalla de inicio con widgets y accesos grandes">' + BG + '239" rx="8"/>' +
-      '<rect class="pn" x="16" y="16" width="488" height="208" rx="10"/>' +
-      '<rect class="bg" x="28" y="28" width="120" height="84" rx="6"/><text x="88" y="74" text-anchor="middle" class="b sm">Reloj</text>' +
-      '<rect class="bg" x="28" y="120" width="120" height="84" rx="6"/><text x="88" y="166" text-anchor="middle" class="b sm">Música</text>' +
-      '<rect class="bg" x="160" y="28" width="92" height="84" rx="6"/><text x="206" y="74" text-anchor="middle" class="b sm">Mapas</text>' +
-      '<rect class="bg" x="260" y="28" width="92" height="84" rx="6"/><text x="306" y="74" text-anchor="middle" class="b sm">Teléfono</text>' +
-      '<rect class="hl" x="160" y="120" width="92" height="84" rx="6"/><text x="206" y="166" text-anchor="middle" class="b sm">Android Auto</text>' +
-      '<rect class="bg" x="260" y="120" width="92" height="84" rx="6"/><text x="306" y="166" text-anchor="middle" class="b sm">Apps</text>' +
-      '<rect class="bg" x="364" y="28" width="128" height="176" rx="6" stroke-dasharray="4 4"/><text x="428" y="112" text-anchor="middle" class="b sm">Datos del auto</text><text x="428" y="130" text-anchor="middle" class="mu">opcional</text>' +
-      '</svg>',
-    s5: OPEN + '220" role="img" aria-label="Fondo estático y escalas de animación reducidas">' + BG + '219" rx="8"/>' +
-      '<rect class="pn" x="16" y="16" width="180" height="188" rx="8"/>' +
-      '<rect class="sky" x="28" y="28" width="156" height="120" rx="6"/><circle class="acf" cx="150" cy="58" r="14"/>' +
-      '<polygon points="28,148 80,84 118,124 146,98 184,148" fill="var(--line)"/>' +
-      '<text class="b sm" x="106" y="176" text-anchor="middle">Fondo estático</text><text class="mu" x="106" y="194" text-anchor="middle">una sola imagen</text>' +
-      '<rect class="pn" x="212" y="16" width="292" height="188" rx="8"/>' +
-      '<text class="b sm" x="228" y="40">Opciones de desarrollador</text>' +
-      [['Escala de animación de ventana', 76], ['Escala de transición', 116], ['Escala de duración', 156]].map(function (r) {
-        return '<text class="sm" x="228" y="' + r[1] + '">' + r[0] + '</text><line class="ln" x1="228" y1="' + (r[1] + 16) + '" x2="440" y2="' + (r[1] + 16) + '" stroke-width="3"/><circle class="acf" cx="300" cy="' + (r[1] + 16) + '" r="8"/><text class="mu" x="488" y="' + (r[1] + 20) + '" text-anchor="end">0,5x</text>';
-      }).join('') +
-      '</svg>',
-    s6: OPEN + '232" role="img" aria-label="Secuencia de arranque: encender el auto, la radio abre la app de proyección y Android Auto">' + BG + '231" rx="8"/>' +
-      '<rect class="pn" x="16" y="30" width="104" height="52" rx="6"/><text class="sm" x="68" y="52" text-anchor="middle">Encender</text><text class="sm" x="68" y="68" text-anchor="middle">el auto</text>' +
-      '<rect class="pn" x="140" y="30" width="104" height="52" rx="6"/><text class="sm" x="192" y="52" text-anchor="middle">La radio</text><text class="sm" x="192" y="68" text-anchor="middle">arranca</text>' +
-      '<rect class="hl" x="264" y="30" width="104" height="52" rx="6"/><text class="sm b" x="316" y="52" text-anchor="middle">App de</text><text class="sm b" x="316" y="68" text-anchor="middle">proyección</text>' +
-      '<rect class="pn" x="388" y="30" width="104" height="52" rx="6"/><text class="sm" x="440" y="52" text-anchor="middle">Android</text><text class="sm" x="440" y="68" text-anchor="middle">Auto</text>' +
-      '<path class="ar" d="M120 56H138M244 56H262M368 56H386"/>' +
-      '<path class="ar" d="M316 84V148"/>' +
-      '<text class="mu" x="326" y="120">cable USB o inalámbrico</text>' +
-      '<rect class="pn" x="286" y="150" width="60" height="64" rx="8"/><rect class="bg" x="294" y="160" width="44" height="34" rx="3"/><circle class="ln" cx="316" cy="204" r="3"/>' +
-      '<text class="sm" x="270" y="186" text-anchor="end">Tu celular</text>' +
-      '</svg>',
-    s7: OPEN + '200" role="img" aria-label="El adaptador OBD2 se conecta al auto y envía datos a la radio">' + BG + '199" rx="8"/>' +
-      '<rect class="pn" x="16" y="70" width="140" height="60" rx="6"/><text class="b sm" x="86" y="96" text-anchor="middle">Puerto OBD2</text><text class="mu" x="86" y="114" text-anchor="middle">bajo el volante</text>' +
-      '<rect class="hl" x="190" y="70" width="140" height="60" rx="6"/><text class="b sm" x="260" y="96" text-anchor="middle">Adaptador</text><text class="mu" x="260" y="114" text-anchor="middle">ELM327</text>' +
-      '<rect class="pn" x="364" y="70" width="140" height="60" rx="6"/><text class="b sm" x="434" y="96" text-anchor="middle">Radio</text><text class="mu" x="434" y="114" text-anchor="middle">app OBD2</text>' +
-      '<path class="ar" d="M156 100H188M330 100H362"/>' +
-      '<text class="mu" x="173" y="60" text-anchor="middle">se enchufa</text><text class="mu" x="347" y="60" text-anchor="middle">Bluetooth o WiFi</text>' +
-      '<text class="mu" x="260" y="168" text-anchor="middle">Velocidad, temperatura y consumo en tu pantalla</text>' +
-      '</svg>',
-    s8: OPEN + '190" role="img" aria-label="Ruta en Ajustes para volver al launcher original">' + BG + '189" rx="8"/>' +
-      '<rect class="pn" x="20" y="24" width="108" height="52" rx="6"/><text class="sm" x="74" y="55" text-anchor="middle">Ajustes</text>' +
-      '<rect class="pn" x="144" y="24" width="108" height="52" rx="6"/><text class="sm" x="198" y="55" text-anchor="middle">Apps</text>' +
-      '<rect class="pn" x="268" y="24" width="108" height="52" rx="6"/><text class="sm" x="322" y="46" text-anchor="middle">Apps</text><text class="sm" x="322" y="62" text-anchor="middle">predeterminadas</text>' +
-      '<rect class="pn" x="392" y="24" width="108" height="52" rx="6"/><text class="sm" x="446" y="46" text-anchor="middle">Pantalla</text><text class="sm" x="446" y="62" text-anchor="middle">de inicio</text>' +
-      '<path class="ar" d="M128 50H142M252 50H266M376 50H390"/>' +
-      '<path class="ar" d="M446 76V100H260V118"/>' +
-      '<rect class="hl" x="196" y="120" width="128" height="44" rx="6"/><text class="b sm" x="260" y="147" text-anchor="middle">Launcher original</text>' +
-      '</svg>'
-  };
-
-  function buildSteps(p, t) {
-    var tk = t.key === 'pend' ? 'liviano' : t.key;
-    var a = num(p.android);
-    var res = p.screen === '7' ? '1024 x 600' : '1280 x 720';
-    var widgets = { liviano: 2, medio: 3, holgado: 4 }[tk];
-    var s = [];
-
-    // 1
-    var s1 = { id: 's1', title: 'Conoce tu radio', items: [
-      { id: 's1-ajustes', html: 'Abre <strong>Ajustes &gt; Acerca del dispositivo</strong> y anota la versión de Android, el modelo y el número de compilación.' },
-      { id: 's1-cpuz', html: 'Instala <strong>CPU-Z</strong> o <strong>Device Info HW</strong> y anota procesador, núcleos, RAM real y almacenamiento libre.' },
-      { id: 's1-form', html: 'Completa el formulario con esos datos: la guía se ajusta sola. <a class="lnk" href="#radio">Ir al formulario ↑</a>' }
-    ] };
-    var falta = [];
-    if (p.cores === '?') falta.push('núcleos');
-    if (p.ram === '?') falta.push('RAM');
-    if (p.android === '?') falta.push('versión de Android');
-    if (falta.length) s1.note = 'Todavía faltan: ' + falta.join(', ') + '.';
-    s.push(s1);
-
-    // 2
-    var perm;
-    if (a === null) perm = 'Busca <strong>Orígenes desconocidos</strong> en Ajustes &gt; Seguridad, o <strong>Instalar apps desconocidas</strong> dentro de Ajustes &gt; Apps, según tu versión.';
-    else if (a >= 8) perm = 'En tu versión el permiso es por app: activa <strong>Instalar apps desconocidas</strong> para el gestor de archivos o el navegador desde el que abrirás el APK.';
-    else perm = 'En tu versión, activa <strong>Orígenes desconocidos</strong> en Ajustes &gt; Seguridad.';
-    var dev;
-    if (p.dev === 'si') dev = 'Activa <strong>Depuración USB</strong> dentro de Opciones de desarrollador.';
-    else if (p.dev === 'no') dev = 'Si no aparece el modo desarrollador, busca el menú de fábrica del firmware. La contraseña varía; suele probarse 123456 u 8888, sin garantía.';
-    else dev = 'Toca varias veces el <strong>número de compilación</strong> para abrir Opciones de desarrollador. Si no aparece, busca el menú de fábrica del firmware.';
-    s.push({ id: 's2', title: 'Permite instalar apps y activa el modo desarrollador', items: [
-      { id: 's2-perm', html: perm },
-      { id: 's2-dev', html: dev },
-      { id: 's2-seg', html: 'Descarga los APK solo desde páginas oficiales y desactiva el permiso al terminar.' }
-    ] });
-
-    // 3
-    var inst;
-    if (p.play === 'si') inst = 'Instálalo desde <strong>Google Play</strong>.';
-    else if (p.play === 'no') inst = 'Descarga el APK desde la página oficial del launcher en tu celular, pásalo por pendrive USB y ábrelo con el gestor de archivos de la radio.';
-    else inst = 'Revisa si la radio trae Google Play. Si no, descarga el APK desde la página oficial en tu celular y pásalo por pendrive USB.';
-    var rec = {
-      liviano: 'Empieza con el <strong>launcher original</strong> de la radio y cambia solo fondo e iconos. Si necesitas más, prueba <strong>Nova Launcher</strong> con los efectos desactivados.',
-      medio: 'Prueba <strong>Nova Launcher</strong> o un launcher de auto como <strong>AGAMA</strong> o <strong>CarWebGuru</strong>, uno a la vez.',
-      holgado: 'Puedes probar launchers de auto con más widgets, como <strong>AGAMA</strong> o <strong>CarWebGuru</strong>, y personalizarlos más.'
-    }[tk];
-    s.push({ id: 's3', title: 'Elige e instala un launcher', items: [
-      { id: 's3-rec', html: rec },
-      { id: 's3-inst', html: inst },
-      { id: 's3-prueba', html: 'Antes de dejarlo como predeterminado, ábrelo unos minutos con el auto detenido. Si se cierra o va lento, desinstálalo y prueba uno más simple.' },
-      { id: 's3-ficha', html: 'Confirma funciones y precios actuales en la ficha de la app.' }
-    ] });
-
-    // 4
-    s.push({ id: 's4', title: 'Arma tu pantalla de inicio', items: [
-      { id: 's4-def', html: 'Presiona <strong>Inicio</strong> y elige el launcher nuevo con <strong>Siempre</strong>, o ve a Ajustes &gt; Apps &gt; Apps predeterminadas &gt; Pantalla de inicio.' },
-      { id: 's4-widgets', html: 'Pon como máximo <strong>' + widgets + ' widgets</strong> (sugerencia para tu nivel): reloj, música y, si quieres, datos OBD2.' },
-      { id: 's4-aa', html: 'Deja <strong>' + projName(p) + '</strong> como acceso grande y destacado.' },
-      { id: 's4-resto', html: 'Agrupa el resto en una carpeta. Botones grandes y nada que obligue a escribir.' }
-    ] });
-
-    // 5
-    var anim = {
-      liviano: 'En Opciones de desarrollador baja las tres escalas de animación a <strong>0,5x</strong> o desactívalas.',
-      medio: 'En Opciones de desarrollador baja las tres escalas de animación a <strong>0,5x</strong>.',
-      holgado: 'Puedes dejar las animaciones en 1x. Si notas tirones, bájalas a <strong>0,5x</strong>.'
-    }[tk];
-    s.push({ id: 's5', title: 'Cuida la apariencia sin perder fluidez', note: 'La resolución de ' + res + ' es la típica para pantallas de ' + p.screen + ' pulgadas. Confirma la tuya con Device Info HW.', items: [
-      { id: 's5-fondo', html: 'Usa un fondo <strong>estático</strong> (JPG o PNG) de ' + res + '. Evita fondos animados o en video.' },
-      { id: 's5-anim', html: anim },
-      { id: 's5-tema', html: 'Elige tema oscuro e iconos grandes.' },
-      { id: 's5-apps', html: (tk === 'liviano' ? 'Con poca memoria esto pesa más: desactiva' : 'Desactiva') + ' o desinstala las apps preinstaladas que no uses.' }
-    ] });
-
-    // 6
-    var enlace;
-    if (p.link === 'cable') enlace = 'Conecta con un <strong>cable USB corto y de buena calidad</strong> en el puerto que la radio dedica a la proyección. Si hay varios, prueba uno por uno.';
-    else if (p.link === 'wifi') enlace = 'Para la conexión inalámbrica, empareja primero por <strong>Bluetooth</strong>, acepta los permisos que pida el celular y mantén WiFi y Bluetooth activos.';
-    else enlace = 'Define si conectas por cable o inalámbrico. Con cable usa un USB corto y bueno; inalámbrico se empareja primero por Bluetooth.';
-    s.push({ id: 's6', title: 'Haz que Android Auto abra al encender', note: p.link === '?' || p.proj === '?' ? 'Completa en el formulario cómo conectas y qué app de proyección usa tu radio.' : '', items: [
-      { id: 's6-boot', html: 'En la radio busca <strong>App de inicio</strong>, <em>Boot app</em> o <em>Autostart</em> y elige <strong>' + projName(p) + '</strong>.' },
-      { id: 's6-enlace', html: enlace },
-      { id: 's6-auto', html: 'Dentro de la app de proyección, activa <strong>Conexión automática</strong> (<em>Auto connect</em>) si existe.' },
-      { id: 's6-cel', html: 'En el celular activa el inicio automático de Android Auto, Bluetooth y ubicación, y quita el ahorro de batería para Android Auto.' },
-      { id: 's6-tasker', html: 'Si la radio no deja elegir app de inicio, crea en <strong>Tasker</strong> o <strong>MacroDroid</strong> una regla: al iniciar el sistema, abrir la app de proyección.' },
-      { id: 's6-espera', html: 'Tras encender, la radio puede tardar entre 20 y 40 segundos en reconocer el celular. Es normal.' }
-    ] });
-
-    // 7
-    if (p.obd === 'no') {
-      s.push({ id: 's7', title: 'Datos del auto con OBD2', skip: true, note: 'No aplica por ahora. Cámbialo en el formulario cuando quieras ver velocidad, temperatura o consumo en la radio.', items: [] });
+/* ---------- contenido: pasos comunes ---------- */
+function termName(a){ return a.os === 'win' ? 'PowerShell' : 'Terminal'; }
+function openTerm(a){
+  return a.os === 'win'
+    ? 'Presiona la tecla <strong>Windows</strong>, escribe <strong>PowerShell</strong> y Enter. Para cada comando de esta guía: botón <strong>Copiar</strong>, clic en la ventana azul y <strong>Ctrl + V</strong> (o clic derecho), y Enter.'
+    : '⌘ Cmd + espacio, escribe <strong>Terminal</strong> y Enter. Para cada comando de esta guía: botón <strong>Copiar</strong>, clic en la Terminal, ⌘ Cmd + V y Enter.';
+}
+function prepStep(a, o){
+  var win = a.os === 'win', tools = a.tools || [], has = function(x){ return tools.indexOf(x) > -1; }, b = [];
+  b.push({ p: openTerm(a) });
+  if (win){
+    var miss = [], checks = [];
+    if (o.tv && !has('python')) miss.push('winget install Python.Python.3.12');
+    if (o.tv && !has('git')) miss.push('winget install Git.Git');
+    if (!has('adb')) miss.push('winget install Google.PlatformTools');
+    if (o.launcher && !has('studio')) miss.push('winget install Google.AndroidStudio');
+    if (o.tv){ checks.push('python --version'); checks.push('git --version'); }
+    checks.push('adb version');
+    if (miss.length){
+      b.push({ p:'Instala lo que falta. Si pregunta por los términos de uso, escribe <code>S</code> (o <code>Y</code>) y Enter.' });
+      b.push({ cmd: miss.join('\n') });
+      b.push({ p:'Cierra PowerShell y ábrela de nuevo para que Windows reconozca lo instalado. Luego comprueba que todo responda con un número de versión:' });
     } else {
-      var items7 = [];
-      if (p.obd === 'quiero') items7.push({ id: 's7-compra', html: 'Compra un adaptador <strong>ELM327</strong> Bluetooth o WiFi y verifica que sea compatible con tu auto.' });
-      items7.push({ id: 's7-puerto', html: 'Conéctalo al puerto OBD2, que suele estar bajo el volante.' });
-      items7.push({ id: 's7-pareo', html: 'Empareja el adaptador desde la radio, por Bluetooth o conectándote a su red WiFi.' });
-      items7.push({ id: 's7-app', html: 'Instala <strong>Torque</strong> o <strong>Car Scanner ELM OBD2</strong> y elige el adaptador en sus ajustes.' });
-      items7.push({ id: 's7-widget', html: tk === 'liviano' ? 'Agrega un solo widget OBD2 y mantén la app simple.' : 'Agrega el widget de datos a tu pantalla de inicio.' });
-      items7.push({ id: 's7-bateria', html: 'Si el auto pierde batería estando apagado, desconecta el adaptador: algunos modelos baratos quedan activos.' });
-      s.push({ id: 's7', title: 'Datos del auto con OBD2', items: items7 });
+      b.push({ p:'Ya tienes lo necesario. Solo comprueba que todo responda con un número de versión:' });
     }
-
-    // 8
-    s.push({ id: 's8', title: 'Respaldo y seguridad', items: [
-      { id: 's8-anota', html: 'Anota cuál era el launcher original y la app de inicio antes de cambiar nada.' },
-      { id: 's8-volver', html: 'Si algo falla, vuelve al original en Ajustes &gt; Apps &gt; Apps predeterminadas &gt; Pantalla de inicio, o desinstala el launcher nuevo.' },
-      { id: 's8-cuentas', html: 'No inicies sesión con cuentas importantes en la radio: el firmware genérico puede tener parches antiguos.' },
-      { id: 's8-detenido', html: 'Configura todo con el auto detenido.' }
-    ] });
-
-    s.forEach(function (st) { if (ART[st.id] && !st.skip) st.art = ART[st.id]; });
-    return s;
-  }
-
-  function renderDiag(p, t) {
-    $('d-model').textContent = (p.model || 'Sin nombre') + ' · ' + p.screen + '"';
-    for (var i = 0; i < 3; i++) {
-      $('g' + i).classList.toggle('on', i <= t.idx);
-      $('gl' + i).classList.toggle('cur', i === t.idx);
-    }
-    $('d-verdict').textContent = t.label;
-    $('d-text').textContent = t.text;
-    var stats = [
-      ['Pantalla', p.screen + ' pulgadas'],
-      ['Procesador', p.cores === '?' ? 'Sin dato' : p.cores + ' núcleos'],
-      ['RAM', p.ram === '?' ? 'Sin dato' : (p.ram === '6' ? '6 GB o más' : p.ram + ' GB')],
-      ['Android', p.android === '?' ? 'Sin dato' : (p.android === '7' ? '7 o anterior' : (p.android === '13' ? '13 o superior' : p.android))]
-    ];
-    var dl = $('d-stats');
-    dl.innerHTML = '';
-    stats.forEach(function (x) {
-      var d = document.createElement('div');
-      var dt = document.createElement('dt'); dt.textContent = x[0];
-      var dd = document.createElement('dd'); dd.textContent = x[1];
-      d.appendChild(dt); d.appendChild(dd); dl.appendChild(d);
-    });
-    var ul = $('d-alerts');
-    ul.innerHTML = '';
-    alerts(p).forEach(function (al) {
-      var li = document.createElement('li');
-      li.className = al.k;
-      var tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = al.k === 'warn' ? 'Verifica' : 'Dato';
-      var tx = document.createElement('span'); tx.textContent = al.t;
-      li.appendChild(tag); li.appendChild(tx); ul.appendChild(li);
-    });
-  }
-
-  function renderSteps(list) {
-    var html = '';
-    list.forEach(function (st, i) {
-      var open = (!closed[st.id] && !st.skip) ? ' open' : '';
-      html += '<details data-id="' + st.id + '"' + open + '><summary><span class="num">' + (i + 1) + '</span><span class="s-title">' + st.title + '</span><span class="count"></span></summary><div class="s-body' + (st.art ? ' has-art' : '') + '"><div class="s-main">';
-      if (st.note) html += '<p class="s-note">' + st.note + '</p>';
-      if (st.items.length) {
-        html += '<ul class="items">';
-        st.items.forEach(function (it) {
-          html += '<li><label class="chk"><input type="checkbox" data-id="' + it.id + '"' + (checks[it.id] ? ' checked' : '') + '><span>' + it.html + '</span></label></li>';
-        });
-        html += '</ul>';
-      }
-      html += '</div>';
-      if (st.art) html += '<figure class="fig">' + st.art + '<figcaption>Ilustración de referencia: tu pantalla puede verse distinta.</figcaption></figure>';
-      html += '</div></details>';
-    });
-    stepsEl.innerHTML = html;
-  }
-
-  function summaryText(p, t, done, total) {
-    var ram = p.ram === '?' ? 'RAM sin confirmar' : 'RAM ' + (p.ram === '6' ? '6 GB o más' : p.ram + ' GB');
-    var cpu = p.cores === '?' ? 'núcleos sin confirmar' : p.cores + ' núcleos';
-    var an = p.android === '?' ? 'Android sin confirmar' : 'Android ' + (p.android === '7' ? '7 o anterior' : (p.android === '13' ? '13 o superior' : p.android));
-    return 'Mi radio: ' + (p.model || 'sin nombre') + ', pantalla de ' + p.screen + ' pulgadas.\n' +
-      'Hardware: ' + cpu + ', ' + ram + ', ' + an + '.\n' +
-      'Nivel de holgura: ' + t.label + '.\n' +
-      'Android Auto: ' + ({ cable: 'por cable', wifi: 'inalámbrico', '?': 'conexión sin definir' }[p.link]) + ', app de proyección ' + ({ zlink: 'ZLink', carlink: 'Carlink', otra: 'otra', '?': 'sin identificar' }[p.proj]) + '.\n' +
-      'Avance de la guía: ' + done + ' de ' + total + ' tareas.';
-  }
-
-  function updateProgress() {
-    var boxes = Array.prototype.slice.call(stepsEl.querySelectorAll('input[type=checkbox]'));
-    var done = boxes.filter(function (b) { return b.checked; }).length;
-    var total = boxes.length;
-    var pct = total ? Math.round(done * 100 / total) : 0;
-    $('p-fill').style.width = pct + '%';
-    $('p-bar').setAttribute('aria-valuenow', String(pct));
-    $('p-text').textContent = done + ' de ' + total + ' tareas';
-    $('nav-pct').textContent = pct + '%';
-    Array.prototype.forEach.call(stepsEl.querySelectorAll('details'), function (d) {
-      var bs = Array.prototype.slice.call(d.querySelectorAll('input[type=checkbox]'));
-      var dn = bs.filter(function (b) { return b.checked; }).length;
-      d.querySelector('.count').textContent = bs.length ? dn + '/' + bs.length : 'No aplica';
-      d.classList.toggle('done', bs.length > 0 && dn === bs.length);
-    });
-    $('summary').value = summaryText(profile, tier(profile), done, total);
-  }
-
-  function render() {
-    var t = tier(profile);
-    renderDiag(profile, t);
-    renderSteps(buildSteps(profile, t));
-    updateProgress();
-  }
-
-  // Formulario
-  IDS.forEach(function (id) {
-    var el = $('f-' + id);
-    el.value = profile[id];
-    if (el.value !== profile[id] && el.tagName === 'SELECT') { el.value = DEFAULT[id]; profile[id] = DEFAULT[id]; }
-    el.addEventListener('input', function () {
-      profile[id] = el.value;
-      write(KEY_P, profile);
-      render();
-    });
-  });
-
-  stepsEl.addEventListener('change', function (e) {
-    var t = e.target;
-    if (t && t.matches && t.matches('input[type=checkbox]')) {
-      checks[t.getAttribute('data-id')] = t.checked;
-      write(KEY_C, checks);
-      updateProgress();
-    }
-  });
-  stepsEl.addEventListener('toggle', function (e) {
-    var d = e.target;
-    if (d && d.tagName === 'DETAILS') closed[d.getAttribute('data-id')] = !d.open;
-  }, true);
-
-  // Tema claro/oscuro
-  $('btn-theme').addEventListener('click', function () {
-    var root = document.documentElement;
-    var cur = root.getAttribute('data-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    var next = cur === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    write(KEY_T, next);
-  });
-
-  // Copiar
-  var live = $('live'), liveTimer;
-  function flash(msg) { live.textContent = msg; clearTimeout(liveTimer); liveTimer = setTimeout(function () { live.textContent = ''; }, 3500); }
-  $('btn-copy').addEventListener('click', function () {
-    var ta = $('summary');
-    ta.select();
-    var ok;
-    try { ok = navigator.clipboard && navigator.clipboard.writeText(ta.value); } catch (e) { ok = null; }
-    if (ok && ok.then) ok.then(function () { flash('Resumen copiado.'); }, function () { ta.select(); flash('Selecciona el texto y cópialo.'); });
-    else flash('Selecciona el texto y cópialo.');
-  });
-
-  // Reiniciar (dos toques)
-  var rb = $('btn-reset'), rt;
-  rb.addEventListener('click', function () {
-    if (rb.getAttribute('data-armed') !== '1') {
-      rb.setAttribute('data-armed', '1');
-      rb.textContent = 'Toca otra vez para borrar datos y avance';
-      clearTimeout(rt);
-      rt = setTimeout(function () { rb.removeAttribute('data-armed'); rb.textContent = 'Volver a los datos iniciales'; }, 4000);
-      return;
-    }
-    clearTimeout(rt);
-    rb.removeAttribute('data-armed');
-    rb.textContent = 'Volver a los datos iniciales';
-    profile = Object.assign({}, DEFAULT);
-    checks = {};
-    closed = {};
-    write(KEY_P, profile);
-    write(KEY_C, checks);
-    IDS.forEach(function (id) { $('f-' + id).value = profile[id]; });
-    render();
-  });
-
-  // Menú: resalta la sección visible y anima las secciones al entrar
-  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
-  var rv = Array.prototype.slice.call(document.querySelectorAll('.rv'));
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    rv.forEach(function (el) { io.observe(el); });
-    var so = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-sec') === e.target.id); });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    ['como', 'radio', 'guia', 'compartir'].forEach(function (id) { so.observe($(id)); });
+    b.push({ cmd: checks.join('\n') });
+    if (o.launcher && !has('studio')) b.push({ note:'info', tag:'Android Studio', html:'Pesa varios GB. Ábrelo una vez y deja que termine la configuración inicial y la descarga del SDK; después puedes cerrarlo. Es lo único que necesita Windows para armar el launcher.' });
+    b.push({ note:'warn', tag:'Si "python" abre la Microsoft Store', html:'Windows trae un acceso directo falso. Ve a Configuración → Aplicaciones → Configuración avanzada de aplicaciones → <strong>Alias de ejecución de aplicaciones</strong> y apaga los dos que dicen <em>python</em>. Abre PowerShell otra vez y repite.' });
+    b.push({ note:'info', tag:'Si winget no existe o no encuentra adb', html:'Instala o actualiza "Instalador de aplicación" desde la Microsoft Store. Para adb puedes bajar "SDK Platform-Tools for Windows" desde <a href="https://developer.android.com/tools/releases/platform-tools" target="_blank" rel="noopener">developer.android.com</a>, descomprimirlo en <span class="path">C:\\platform-tools</span> y escribir <code>C:\\platform-tools\\adb</code> en lugar de <code>adb</code>.' });
   } else {
-    rv.forEach(function (el) { el.classList.add('in'); });
+    if (!has('brew')){
+      b.push({ p:'<strong>Instala Homebrew</strong>, un instalador gratuito de programas. Te pide la contraseña de tu Mac; al escribirla no se ve nada, es normal.' });
+      b.push({ cmd:'/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' });
+      b.push({ note:'warn', tag:'Parece congelado, pero no', html:'Si dice <em>"Searching online for the Command Line Tools"</em>, espera. Si luego dice <em>"Press any key when the installation has completed"</em>, no presiones nada todavía: busca la ventana de Apple (a veces queda detrás de la Terminal), dale <strong>Instalar</strong> y espera de 10 a 30 minutos. Cuando diga "Se ha instalado el software", regresa a la Terminal y presiona Enter.' });
+      b.push({ note:'info', tag:'Al terminar: "Next steps"', html:'Homebrew muestra dos o tres líneas que empiezan con <code>echo</code> y <code>eval</code>. Llevan el nombre de usuario de tu Mac: copia las de <strong>tu</strong> pantalla y pégalas una por una.' });
+    }
+    if (!has('adb')){ b.push({ p:'<strong>Instala adb</strong>, la herramienta oficial de Google para dar órdenes a un aparato Android.' }); b.push({ cmd:'brew install android-platform-tools' }); }
+    if (o.launcher && !has('jdk')){
+      b.push({ p:'<strong>Herramientas para armar el launcher.</strong> Acepta las licencias de Google escribiendo <code>y</code> y Enter.' });
+      b.push({ cmd:'brew install openjdk@17 android-commandlinetools\nexport JAVA_HOME=/opt/homebrew/opt/openjdk@17\nsdkmanager "platforms;android-34" "build-tools;34.0.0"' });
+      b.push({ note:'info', tag:'Mac con chip Intel', html:'En esos equipos la ruta de Java es <span class="path">/usr/local/opt/openjdk@17</span> en lugar de <span class="path">/opt/homebrew/opt/openjdk@17</span>.' });
+    }
+    b.push({ p:'Comprueba que todo responda:' });
+    b.push({ cmd:'brew --version\nadb version' });
+  }
+  return { id:'prep', t: a.os === 'win' ? 'Prepara Windows' : 'Prepara la Mac', b:b };
+}
+
+function pairBlocks(a, withPort){
+  var b = [];
+  b.push({ p:'En el equipo: Opciones de desarrollador → Depuración inalámbrica → <strong>Vincular dispositivo con código</strong>. Aparecen un código de 6 números y una dirección con puerto. Deja el cuadro abierto. En los ejemplos la IP es <code>' + IP + '</code>; usa los números de <strong>tu</strong> pantalla.' });
+  b.push({ cmd:'adb pair ' + IP + ':37145 482913' });
+  b.push({ muted:'Respuesta esperada: "Successfully paired". Solo se hace una vez.' });
+  b.push({ p:'Cierra el cuadro. En la pantalla de Depuración inalámbrica aparece "Dirección IP y puerto": ese puerto es <strong>distinto</strong> al del cuadro.' });
+  b.push({ cmd:'adb connect ' + IP + ':41827' });
+  if (withPort){
+    b.push({ p:'El puerto inalámbrico cambia cada vez que el equipo se reinicia y las herramientas usan siempre el 5555. Usa la dirección anterior y luego la misma IP terminando en 5555.' });
+    b.push({ cmd:'adb -s ' + IP + ':41827 tcpip 5555\nadb connect ' + IP + ':5555\nadb devices' });
+    b.push({ muted:'Debe aparecer tu IP con :5555 y la palabra "device". Ver dos líneas es normal: es el mismo equipo por dos caminos.' });
+  } else {
+    b.push({ cmd:'adb devices' });
+    b.push({ muted:'Debe aparecer la dirección con la palabra "device". Si el puerto cambia más tarde, repite solo "adb connect".' });
+  }
+  return b;
+}
+function netNote(a){
+  return a.os === 'win'
+    ? { note:'warn', tag:'Si no conecta o se queda esperando', html:'Revisa que la red del notebook esté marcada como <strong>Privada</strong> (Configuración → Red e Internet → Wi-Fi → tu red → Tipo de perfil de red) y que el Firewall de Windows haya permitido a adb. Luego repite el paso.' }
+    : { note:'warn', tag:'Si dice "No route to host"', html:'Ajustes del Sistema de la Mac → Privacidad y seguridad → <strong>Red local</strong> → activa Terminal y repite.' };
+}
+
+/* ---------- contenido: TV ---------- */
+function tvSteps(a){
+  var win = a.os === 'win', fire = a.tvsys === 'fire', launcher = (a.tvgoal === 'launcher') && !fire;
+  var frame = a.brand === 'tclframe', tcl = a.brand === 'tcl' || frame, wired = a.conn === 'eth';
+  var s = [];
+
+  s.push({ id:'probar', t:'Prueba todo antes de tocar nada', b:[
+    { p:'Micrófono del control, AirPlay o Chromecast, entradas HDMI, botones especiales y tus apps. Anota cómo funciona cada cosa; si algo falla después, sabrás si ya fallaba antes.' } ] });
+
+  if (fire){
+    s.push({ id:'tvdev', t:'Abre la puerta de la Fire TV', b:[
+      { list:[ 'Ajustes → <strong>Mi Fire TV</strong> → <strong>Acerca de</strong>. Selecciona el nombre del dispositivo siete veces seguidas hasta ver que ya eres desarrollador.',
+               'Vuelve atrás: aparece <strong>Opciones para desarrolladores</strong>. Entra y enciende <strong>Depuración ADB</strong>.',
+               'Anota la IP de la TV en Ajustes → Mi Fire TV → Acerca de → Red. Computador y TV deben estar en la misma red.' ] },
+      { muted:'Deja la TV encendida mientras trabajas.' } ] });
+  } else {
+    var items = [ 'Ajustes → Sistema → Información. Baja a <strong>Compilación</strong> y presiona OK siete veces seguidas hasta ver "Ya eres desarrollador".',
+                  'Ajustes → Sistema → <strong>Opciones de desarrollador</strong> → Depuración USB. Si ves "Depuración por red", enciéndela también.' ];
+    if (wired) items.push('Desconecta el cable de red y conecta la TV al Wi-Fi, a la <strong>misma red</strong> que tu computador (Ajustes → Red e Internet).');
+    items.push('Enciende la <strong>Depuración inalámbrica</strong> en Opciones de desarrollador. Deja la TV encendida; vamos a necesitar esa pantalla.');
+    s.push({ id:'tvdev', t:'Abre la puerta de la TV', b:[ { list:items } ] });
   }
 
-  render();
+  s.push(prepStep(a, { tv:true, launcher:launcher }));
+
+  if (fire){
+    s.push({ id:'conectar', t:'Conecta el computador con la Fire TV', b:[
+      { p:'Usa la IP que anotaste. La Fire TV no pide código de vinculación.' },
+      { cmd:'adb connect ' + IP + ':5555\nadb devices' },
+      { p:'La primera vez la TV pregunta <strong>"¿Permitir depuración USB?"</strong>: marca <strong>Permitir siempre</strong>. Debe aparecer tu IP con la palabra "device".' },
+      netNote(a) ] });
+  } else {
+    var cb = pairBlocks(a, true); cb.push(netNote(a));
+    s.push({ id:'conectar', t:'Vincula el computador con la TV', b:cb });
+  }
+
+  s.push({ id:'proyecto', t:'Descarga CleanYourTV y conoce tu TV', b: win ? [
+      { p:'<a href="https://github.com/Gathin23/cleanyourtv" target="_blank" rel="noopener">CleanYourTV</a> es un proyecto abierto con listas probadas en más de 340 modelos. Descárgalo:' },
+      { cmd: String.raw`cd ~
+git clone https://github.com/Gathin23/cleanyourtv
+cd cleanyourtv
+python -m venv tools\venv
+tools\venv\Scripts\python.exe -m pip install -r tools\requirements.txt` },
+      { muted:'Desde aquí todos los comandos se corren dentro de la carpeta cleanyourtv. Si cierras PowerShell: cd ~\\cleanyourtv' },
+      { p:'Ahora identifica tu TV y guarda la lista de apps activas:' },
+      { cmd: 'adb -s ' + IP + ':5555 shell getprop | Select-String -Pattern "ro.product.name|ro.product.device|ro.build.version.release|ro.build.id"\nadb -s ' + IP + ':5555 shell pm list packages -e | Sort-Object | Out-File -Encoding ascii mis-apps-activas.txt' },
+      { p:'Comparte esos datos y el archivo <span class="path">mis-apps-activas.txt</span> con Claude. Busca la lista más parecida en la carpeta <span class="path">examples\\</span> y arma la tuya. El modelo comercial no basta: dos TVs del mismo nombre pueden traer firmware distinto según el país.' } ] : [
+      { p:'<a href="https://github.com/Gathin23/cleanyourtv" target="_blank" rel="noopener">CleanYourTV</a> es un proyecto abierto con listas probadas en más de 340 modelos. Descárgalo:' },
+      { cmd:'cd ~\ngit clone https://github.com/Gathin23/cleanyourtv\ncd cleanyourtv\npython3 -m venv tools/venv\ntools/venv/bin/pip install -r tools/requirements.txt' },
+      { muted:'Desde aquí todos los comandos se corren dentro de la carpeta cleanyourtv. Si cierras la Terminal: cd ~/cleanyourtv' },
+      { p:'Ahora identifica tu TV y guarda la lista de apps activas:' },
+      { cmd:'adb -s ' + IP + ':5555 shell getprop | grep -E "ro.product.name|ro.product.device|ro.build.version.release|ro.build.id"\nadb -s ' + IP + ':5555 shell pm list packages -e | sort > mis-apps-activas.txt' },
+      { p:'Comparte esos datos y el archivo <span class="path">mis-apps-activas.txt</span> con Claude. Busca la lista más parecida en la carpeta <span class="path">examples/</span> y arma la tuya. El modelo comercial no basta: dos TVs del mismo nombre pueden traer firmware distinto según el país.' } ] });
+
+  var dec = [
+    { table:{ head:['Grupo','Ejemplos','Decisión'], rows:[
+      ['Promos y contenido de la marca','mensajes, recomendaciones, canales gratis de la marca, modo hotel','Desactivar'],
+      ['Rastreo y publicidad','Samba TV (lo que ves), logs, publicidad de Android 14, apps de socios que se instalan solas','Desactivar'],
+      ['Apps que no usas','cuenta de la marca, "limpiador", manual, Alexa, Play Juegos','Tú decides'],
+      ['Funciones que quizá usas','Asistente de Google, AirPlay, Chromecast, Miracast, modo juego, USB, audífonos','Tú decides'],
+      ['Lo que hace funcionar la TV','HDMI y Live TV, control remoto, Play Store, servicios MediaTek','Nunca tocar'] ] } } ];
+  if (tcl) dec.push({ note:'warn', tag:'Rastreo vs. actualizaciones (TCL)', html:'La app de Samba TV (<code>com.tcl.ttvs</code>) también actualiza el sistema. Si la apagas, para actualizar la reactivas un momento y la vuelves a apagar.' });
+  if (frame) dec.push({ note:'alert', tag:'TV tipo cuadro', html:'No desactives <code>com.tcl.exhibit</code>: es el modo Frame aunque otras listas lo llamen "demo de tienda". Si el botón Frame deja de funcionar: <code>adb -s IP:5555 shell pm enable com.tcl.exhibit</code>.' });
+  if (fire) dec.push({ note:'info', tag:'Fire TV', html:'En Fire OS solo funciona la limpieza; el sistema no deja cambiar la pantalla de inicio.' });
+  dec.push({ p:'Pásale a Claude la lista de apps de tu TV: la compara con las listas probadas y solo te pregunta lo que depende de tus gustos.' });
+  s.push({ id:'decidir', t:'Decide qué se apaga y qué se queda', b:dec });
+
+  s.push({ id:'lotes', t:'Haz el respaldo y limpia por lotes', b: win ? [
+      { h:'1. Respaldo' },
+      { cmd: String.raw`New-Item -ItemType Directory -Force mi-tv\respaldo | Out-Null
+adb -s 192.168.1.50:5555 shell getprop | Out-File -Encoding ascii mi-tv\respaldo\getprop.txt
+adb -s 192.168.1.50:5555 shell pm list packages | Out-File -Encoding ascii mi-tv\respaldo\apps.txt
+adb -s 192.168.1.50:5555 shell settings list global | Out-File -Encoding ascii mi-tv\respaldo\global.txt
+adb -s 192.168.1.50:5555 shell settings list secure | Out-File -Encoding ascii mi-tv\respaldo\secure.txt` },
+      { h:'2. Un lote a la vez' },
+      { p:'En Windows cada herramienta recibe la IP con <code>-TvHost</code>; no hay que fijar nada antes. Divide tu lista en archivos pequeños (promos, rastreo, apps). Después de cada uno, prueba inicio, una app y una entrada HDMI.' },
+      { cmd: String.raw`powershell -ExecutionPolicy Bypass -File tools\disable.ps1 -TvHost 192.168.1.50 mi-tv\lote1-promos.txt` },
+      { muted:'La primera vez la TV pregunta "¿Permitir depuración?": marca Permitir siempre. Verás una línea "new state: disabled-user" por app; la herramienta guarda un registro para deshacer.' },
+      { h:'Deshacer un lote' },
+      { cmd: String.raw`powershell -ExecutionPolicy Bypass -File tools\restore.ps1 -TvHost 192.168.1.50 mi-tv\lote1-promos.txt` } ] : [
+      { h:'1. Respaldo' },
+      { cmd:'mkdir -p mi-tv/respaldo\nadb -s ' + IP + ':5555 shell getprop > mi-tv/respaldo/getprop.txt\nadb -s ' + IP + ':5555 shell pm list packages > mi-tv/respaldo/apps.txt\nadb -s ' + IP + ':5555 shell settings list global > mi-tv/respaldo/global.txt\nadb -s ' + IP + ':5555 shell settings list secure > mi-tv/respaldo/secure.txt' },
+      { h:'2. Dile a las herramientas cuál es tu TV' },
+      { cmd:'export TV_HOST=' + IP + ':5555' },
+      { muted:'Se pierde al cerrar la Terminal. La primera vez la TV pregunta "¿Permitir depuración?": marca Permitir siempre.' },
+      { h:'3. Un lote a la vez' },
+      { p:'Divide tu lista en archivos pequeños (promos, rastreo, apps). Después de cada uno, prueba inicio, una app y una entrada HDMI.' },
+      { cmd:'tools/disable.sh mi-tv/lote1-promos.txt' },
+      { muted:'Verás una línea "new state: disabled-user" por app; la herramienta guarda un registro para deshacer.' },
+      { h:'Deshacer un lote' },
+      { cmd:'tools/restore.sh mi-tv/lote1-promos.txt' } ] });
+
+  if (launcher){
+    s.push({ id:'wifi', t:'Revisa las redes Wi-Fi guardadas y apaga el asistente', b: (win ? [
+        { p:'En Google TV hay que apagar el asistente de configuración inicial (<code>setupwraith</code>). Si guardó alguna red, al apagarlo la TV la olvida.' },
+        { cmd:'adb -s ' + IP + ':5555 shell dumpsys wifi | Select-String -Pattern \'SSID: "[^"]*"|cname=[^ ]*\' -AllMatches | ForEach-Object { $_.Matches.Value }' } ] : [
+        { p:'En Google TV hay que apagar el asistente de configuración inicial (<code>setupwraith</code>). Si guardó alguna red, al apagarlo la TV la olvida.' },
+        { cmd:'adb -s ' + IP + ':5555 shell dumpsys wifi | grep -oE \'SSID: "[^"]*"|cname=[^ ]*\'' } ]).concat([
+        { muted:'Cada red que diga setupwraith: en la TV, Ajustes → Red e Internet → la red → Olvidar red. Si es la que usas, vuelve a conectarte desde Ajustes.' },
+        { p:'Luego apaga el asistente. El archivo contiene una sola línea: <code>com.google.android.tungsten.setupwraith</code>.' },
+        { cmd: win ? String.raw`powershell -ExecutionPolicy Bypass -File tools\disable.ps1 -TvHost 192.168.1.50 mi-tv\lote4-setupwraith.txt` : 'tools/disable.sh mi-tv/lote4-setupwraith.txt' } ]) });
+
+    s.push({ id:'launcher', t:'Construye e instala el launcher', b: win ? [
+        { cmd: String.raw`$env:HOME_KEY_SERVICE = "1"
+powershell -ExecutionPolicy Bypass -File launcher\build-and-install.ps1 -TvHost 192.168.1.50` },
+        { p:'La primera vez tarda varios minutos. Termina con "Installed. Press Home on the remote to see it." <code>HOME_KEY_SERVICE</code> hace que funcionen los botones de apps del control; a cambio, el volumen sostenido se mueve de uno en uno. Quita la primera línea si prefieres el volumen normal.' } ] : [
+        { cmd:'export JAVA_HOME=/opt/homebrew/opt/openjdk@17\nHOME_KEY_SERVICE=1 launcher/build-and-install.sh' },
+        { p:'La primera vez tarda varios minutos. Termina con "Installed. Press Home on the remote to see it." <code>HOME_KEY_SERVICE=1</code> hace que funcionen los botones de apps del control; a cambio, el volumen sostenido se mueve de uno en uno. Quítalo si prefieres el volumen normal.' },
+        { muted:'Si cerraste la Terminal desde la instalación de Java, el export hay que repetirlo (Mac Intel: /usr/local/opt/openjdk@17).' } ] });
+
+    s.push({ id:'tema', t:'Personaliza tu pantalla de inicio y tus fondos', b:[
+      { p: 'Un archivo <span class="path">' + (win ? 'mi-tv\\tema\\config.json' : 'mi-tv/tema/config.json') + '</span> cambia el look. Claude lo puede escribir por ti; solo dile cómo lo quieres.' },
+      { table:{ head:['Quieres…','Opción','Ejemplo'], rows:[
+        ['Fijar tus 4 apps del dock','<code>dock_apps</code>','lista de apps en orden'],
+        ['Fondos propios que cambian solos','<code>wallpaper_rotation_minutes</code>','1 a 1440 minutos'],
+        ['Oscurecer el fondo para leer el reloj','<code>wallpaper_dim</code>','15 (%)'],
+        ['Dock de vidrio esmerilado','<code>dock_glass</code>','true'],
+        ['Quitar el brillo de color de cada app','<code>ambient_glow</code>, <code>app_glow</code>','false'],
+        ['Botones del control (TCL)','<code>app_keys</code>','"4062:com.netflix.ninja"'],
+        ['Mover o quitar apps con el control','<code>tile_menu</code>, <code>app_library</code>','true'] ] } },
+      { p:'<strong>Fotos de fondo:</strong> copia tu carpeta de fotos dentro de cleanyourtv, pide a Claude que las recorte a <strong>1920 × 1080</strong> y las ponga en la carpeta <span class="path">wallpapers</span> de tu tema, con nombres sin espacios. El launcher llena la pantalla y recorta lo que sobra: una foto horizontal 16:9 se ve completa; una vertical de celular solo muestra una franja del centro.' },
+      { p:'Aplica el tema:' },
+      { cmd: win ? String.raw`powershell -ExecutionPolicy Bypass -File tools\theme.ps1 -TvHost 192.168.1.50 mi-tv\tema` : 'tools/theme.sh mi-tv/tema' },
+      { muted:'Tu carpeta de tema vive dentro de mi-tv, nunca dentro de themes ni examples. Los temas del proyecto sirven de inspiración: copia su fondo a tu tema en lugar de aplicarlos tal cual, o perderás tus botones. El fondo cambia solo mientras estás en la pantalla de inicio.' } ] });
+  }
+
+  var close = [ { list:[
+    'Reinicia la TV y comprueba' + (launcher ? ': debe aparecer directo la pantalla nueva, con tus fondos, el dock y los botones del control funcionando.' : ' que todo siga funcionando como antes.') ] } ];
+  if (wired) close[0].list.push('Conecta de nuevo el cable de red. El Wi-Fi queda guardado de respaldo.');
+  close[0].list.push(fire ? 'Apaga la <strong>Depuración ADB</strong> en Opciones para desarrolladores.' : 'En Opciones de desarrollador: <strong>Revocar autorizaciones de depuración USB</strong>, y apaga Depuración inalámbrica y Depuración USB.');
+  close[0].list.push('Con la depuración encendida, un equipo autorizado en tu red puede controlar la TV.');
+  close[0].list.push('Guarda la carpeta <span class="path">cleanyourtv</span>: ahí están tus listas' + (launcher ? ', tu tema' : '') + ' y el registro para deshacer todo con <code>' + (win ? 'tools\\restore.ps1' : 'tools/restore.sh') + '</code>.');
+  s.push({ id:'cierre', t:'Cierra bien', b:close });
+
+  s.push(problemsStep(a));
+  return s;
+}
+
+/* ---------- contenido: radio de auto ---------- */
+function carSteps(a){
+  var win = a.os === 'win', aaos = a.cartype === 'aaos', link = a.carlink;
+  var goal = aaos ? ['install'] : (a.cargoal || []), g = function(x){ return goal.indexOf(x) > -1; };
+  var s = [];
+
+  var safe = [ { list:[
+    'Haz todo con el auto <strong>estacionado</strong>. No dejes el radio encendido durante horas con el motor apagado: puede descargar la batería.',
+    'Anota o fotografía tus ajustes actuales (ecualizador, canal de audio, ajustes del volante, cámara).',
+    'No entres al menú de <strong>ajustes de fábrica</strong> ni cambies sus claves: está protegido porque un cambio equivocado puede dejar la unidad inservible.',
+    'Todo lo que se desactiva con adb se puede volver a activar, pero si el radio deja de arrancar la salida final es un restablecimiento de fábrica, que borra tu configuración. Por eso se avanza de a poco.' ] } ];
+  if (!aaos) safe.push({ note:'alert', tag:'Regla práctica: no tocar', html:'No desactives nada del sistema Android ni paquetes cuyo nombre sugiera <em>mcu</em>, <em>can</em>/<em>canbus</em>, <em>radio</em>, <em>bluetooth</em>/<em>bt</em>, <em>camera</em>/<em>avm</em>, <em>steer</em>/<em>volante</em>, <em>amp</em>, <em>carplay</em> o <em>zlink</em>. Controlan funciones del auto. A diferencia de las TVs, aquí no hay listas probadas: desactiva poco y siempre de una en una.' });
+  if (aaos) safe.push({ note:'warn', tag:'Auto con Android Automotive', html:'Según una guía de terceros (<a href="https://anexplorer.io/features/apk-installer/android-automotive" target="_blank" rel="noopener">AnExplorer</a>, que vende una app y no está verificada de forma independiente), algunas marcas dan acceso a adb sin problema (Polestar, Volvo) y otras lo restringen o lo reservan al concesionario (GM, Renault, Honda, Rivian). Una actualización del fabricante puede revertir cambios. Aquí solo se contempla <strong>instalar apps</strong>; no se recomienda desactivar nada del sistema, y los videos solo se pueden usar con el auto detenido. Revisa antes la documentación de tu marca.' });
+  s.push({ id:'seguridad', t:'Antes de empezar: seguridad primero', b:safe });
+
+  s.push({ id:'cardev', t: aaos ? 'Activa el modo desarrollador del auto' : 'Activa el modo desarrollador del radio', b: aaos ? [
+      { list:[ 'Ajustes → Sistema (o Acerca de) → <strong>Número de compilación</strong>: tócalo siete veces seguidas hasta ver el aviso de desarrollador.',
+               'Entra a <strong>Opciones de desarrollador</strong> y enciende la depuración que ofrezca tu auto (USB o inalámbrica).' ] },
+      { note:'info', tag:'Si no aparece', html:'Algunas marcas lo ocultan o lo reservan a la red de concesionarios. En ese caso no hay forma sencilla de seguir: consulta con la marca.' } ] : [
+      { list:[ 'Ajustes → <strong>Acerca del dispositivo</strong> (a veces "Información del sistema") → <strong>Número de compilación</strong>: tócalo siete veces seguidas hasta ver el aviso de desarrollador.',
+               'Vuelve a Ajustes → Sistema → Opciones de desarrollador y enciende <strong>Depuración USB</strong>. Si existe <strong>Depuración inalámbrica</strong>, enciéndela también.' ] },
+      { note:'info', tag:'Si no aparece o pide una clave', html:'Algunas unidades esconden las opciones de desarrollador o piden una clave que depende de la hora: pon primero el reloj del radio en hora. Si sigue sin aparecer, pregunta al vendedor o busca el manual de tu modelo exacto. No pruebes claves al azar en el menú de fábrica.' } ] });
+
+  s.push(prepStep(a, { tv:false, launcher:false }));
+
+  var cb = [];
+  var wifiBlocks = function(){
+    var w = [ { p:'Conecta el radio al Wi-Fi de tu casa (con el auto estacionado cerca) o al hotspot de tu celular, y conecta <strong>el computador a esa misma red</strong>.' } ];
+    return w.concat(pairBlocks(a, false));
+  };
+  var usbBlocks = function(){
+    return [
+      { p:'Conecta un cable USB de <strong>datos</strong> (no uno que solo cargue) desde el computador al puerto USB del radio. Luego revisa:' },
+      { cmd:'adb devices' },
+      { p:'En la pantalla del radio aparece <strong>"¿Permitir depuración USB?"</strong>: marca Permitir siempre. Si adb dice <code>unauthorized</code>, acepta ese aviso; si no aparece nada, prueba otro cable o el otro puerto USB del radio.' },
+      { note:'info', tag:'Si el radio no se deja ver', html:'Algunas unidades tienen una opción de modo USB (host o periférico) en Opciones de desarrollador o en sus ajustes. Si la tuya la tiene, ponla en periférico o dispositivo mientras dure el trabajo. Si no existe ninguna ruta que conecte, no insistas: puede que tu modelo no lo permita.' } ];
+  };
+  if (link === 'wifi'){ cb = wifiBlocks(); }
+  else if (link === 'usb'){ cb = usbBlocks(); }
+  else {
+    cb = [ { p:'Entra a Opciones de desarrollador del radio y busca <strong>Depuración inalámbrica</strong>. Si existe, sigue la ruta Wi-Fi; si no existe, la ruta USB.' },
+           { h:'Ruta Wi-Fi' } ].concat(wifiBlocks(), [ { h:'Ruta USB' } ], usbBlocks());
+  }
+  cb.push(netNote(a));
+  s.push({ id:'carconn', t:'Conecta el computador con el radio', b:cb });
+
+  if (!aaos){
+    var idb = win ? [
+      { p:'Averigua qué radio es y guarda la lista de apps:' },
+      { cmd:'adb shell getprop ro.product.model\nadb shell getprop ro.build.version.release\nadb shell pm list packages -3 | Sort-Object | Out-File -Encoding ascii apps-instaladas.txt\nadb shell pm list packages -e | Sort-Object | Out-File -Encoding ascii apps-activas.txt' } ] : [
+      { p:'Averigua qué radio es y guarda la lista de apps:' },
+      { cmd:'adb shell getprop ro.product.model\nadb shell getprop ro.build.version.release\nadb shell pm list packages -3 | sort > apps-instaladas.txt\nadb shell pm list packages -e | sort > apps-activas.txt' } ];
+    idb.push({ p:'El archivo <span class="path">apps-instaladas.txt</span> trae solo las apps que se agregaron (no son del sistema Android). Compártelo con Claude junto con el modelo y la versión de Android: te las clasifica en "seguro quitar", "dudoso" y "no tocar". Si <code>adb devices</code> muestra más de un equipo, agrega <code>-s</code> y su nombre a cada comando.' });
+    s.push({ id:'carid', t:'Identifica el radio y haz el respaldo', b: idb.concat([
+      { p:'Guarda también los ajustes actuales:' },
+      { cmd: win ? String.raw`adb shell settings list global | Out-File -Encoding ascii respaldo-global.txt
+adb shell settings list secure | Out-File -Encoding ascii respaldo-secure.txt` : 'adb shell settings list global > respaldo-global.txt\nadb shell settings list secure > respaldo-secure.txt' } ]) });
+  }
+
+  if (g('apps')){
+    s.push({ id:'cardis', t:'Desactiva apps de a poco', b:[
+      { p:'Empieza solo por apps que <strong>agregaron</strong> (promociones, tiendas, apps que nunca usas). Un paquete se desactiva así; reemplaza el nombre por el que corresponda:' },
+      { cmd:'adb shell pm disable-user --user 0 com.ejemplo.app' },
+      { p:'Para devolverlo:' },
+      { cmd:'adb shell pm enable com.ejemplo.app' },
+      { p:'Para varias apps, guarda los nombres en un archivo (uno por línea, por ejemplo <span class="path">lote1.txt</span>) y aplícalos de una vez. Hazlo en lotes de 2 o 3:' },
+      { cmd: win ? 'Get-Content lote1.txt | Where-Object { $_.Trim() } | ForEach-Object { adb shell pm disable-user --user 0 $_.Trim() }' : 'while read -r p; do [ -n "$p" ] && adb shell pm disable-user --user 0 "$p" < /dev/null; done < lote1.txt' },
+      { p:'Deshacer el lote completo:' },
+      { cmd: win ? 'Get-Content lote1.txt | Where-Object { $_.Trim() } | ForEach-Object { adb shell pm enable $_.Trim() }' : 'while read -r p; do [ -n "$p" ] && adb shell pm enable "$p" < /dev/null; done < lote1.txt' },
+      { note:'warn', tag:'Después de cada lote', html:'Reinicia el radio y prueba: sonido, radio AM/FM, cámara de retroceso, botones del volante, Bluetooth, GPS y CarPlay/Android Auto si los usas. Si algo falla, reactiva ese lote al tiro. Si dice <em>Permission Denial</em>, ese paquete no se puede desactivar así: déjalo.' } ] });
+  }
+
+  if (g('install')){
+    s.push({ id:'carapk', t:'Instala apps desde un archivo APK', b:[
+      { p:'Descarga el APK solo desde la tienda oficial de la app o desde el sitio de su autor, y guárdalo en tu computador. Luego instálalo:' },
+      { cmd: win ? String.raw`adb install -r "C:\Users\tu-usuario\Downloads\app.apk"` : 'adb install -r ~/Downloads/app.apk' },
+      { muted:'Debe responder "Success". Si no funciona, la app puede no ser compatible con la versión de Android del radio.' },
+      { note:'alert', tag:'Con el auto detenido', html:'Instala, configura y prueba las apps solo con el auto estacionado. Evita apps de video o que distraigan mientras conduces.' } ] });
+  }
+
+  if (g('launcher')){
+    s.push({ id:'carlau', t:'Cambia la pantalla de inicio', b:[
+      { p:'Instala el launcher que elijas (desde Play Store si tu radio la tiene, o con <code>adb install -r</code> desde su APK oficial) y elígelo como inicio: Ajustes → Aplicaciones → Aplicaciones predeterminadas → <strong>Aplicación de inicio</strong>. La ruta puede variar según el radio.' },
+      { note:'warn', tag:'No desactives el launcher original', html:'Los botones del volante, la radio y los accesos a CarPlay o Android Auto suelen apoyarse en él. Pruébalos todos. Si algo falla, vuelve a elegir el inicio original en la misma pantalla.' } ] });
+  }
+
+  s.push({ id:'carclose', t:'Cierra bien', b:[ { list:[
+    'Desconecta: <code>adb disconnect</code> (si fue por Wi-Fi) y desenchufa el cable (si fue por USB).',
+    'En Opciones de desarrollador apaga <strong>Depuración USB</strong> y <strong>Depuración inalámbrica</strong>. Con la depuración encendida, un equipo conectado puede copiar datos e instalar apps sin avisar.',
+    'Guarda los archivos de lista y de respaldo: te sirven para deshacer.',
+    'Una actualización del radio o del auto puede reactivar apps o borrar cambios. Si pasa, repite el lote.' ] } ] });
+
+  s.push(problemsStep(a));
+  return s;
+}
+
+/* ---------- problemas ---------- */
+function problemsStep(a){
+  var win = a.os === 'win', tv = a.device === 'tv', car = a.device === 'car';
+  var android = tv && a.tvsys === 'android', launcher = android && a.tvgoal === 'launcher', frame = a.brand === 'tclframe';
+  var R = [];
+  if (android) R.push(['El interruptor de Depuración inalámbrica se regresa solo','La TV está por cable','Conecta la TV por Wi-Fi']);
+  if (win) R.push(['"adb no se reconoce como nombre de un cmdlet"','PowerShell se abrió antes de instalar adb','Cierra PowerShell, ábrela de nuevo y repite']);
+  if (win) R.push(['adb no conecta o se queda esperando','El Firewall o el perfil de red "Público" bloquea la conexión','Marca la red como Privada y permite adb en el Firewall']);
+  if (win && tv) R.push(['Se abre la Microsoft Store al escribir python','Alias de ejecución de Windows','Apaga los alias de python (paso "Prepara Windows")']);
+  if (win && tv) R.push(['"la ejecución de scripts está deshabilitada"','Política de ejecución de PowerShell','Usa el comando completo con <code>powershell -ExecutionPolicy Bypass -File …</code>']);
+  if (!win) R.push(['"No route to host"','macOS bloquea la red local','Privacidad y seguridad → Red local → Terminal']);
+  if (launcher) R.push(['"Skipping … setupwraith"','Una red Wi-Fi guardada es del asistente','Olvida esa red en la TV y repite']);
+  if (launcher) R.push(['"shell command too long" al aplicar el tema','Se está usando la conexión de Google ADB para mandar fotos', win ? '<code>Remove-Item Env:TV_ADB_BINARY</code> y repite' : '<code>unset TV_ADB_BINARY</code> y repite']);
+  if (frame) R.push(['El botón Frame no hace nada','Se desactivó <code>com.tcl.exhibit</code>','<code>pm enable com.tcl.exhibit</code>']);
+  if (launcher) R.push(['El fondo no cambia','Solo rota con la pantalla de inicio a la vista','Espera en inicio 1–2 min sin tocar el control']);
+  if (tv) R.push(['Se perdió la conexión','La TV se reinició o cayó el Wi-Fi','Repite "Vincula/Conecta" y "Fija el puerto 5555"']);
+  if (car){
+    R.push(['adb dice <code>unauthorized</code>','El radio aún no aceptó este computador','Acepta el aviso en la pantalla del radio; si no sale, apaga y enciende la depuración']);
+    R.push(['El radio no aparece con el cable USB','Cable que solo carga, puerto sin modo periférico u otro problema de conexión', win ? 'Prueba otro cable de datos y el otro puerto USB. Si Windows no lo reconoce, instala el controlador USB de Google desde Android Studio (SDK Manager → SDK Tools)' : 'Prueba otro cable de datos y el otro puerto USB del radio']);
+    R.push(['<em>Permission Denial</em> al desactivar','Ese paquete está protegido','Déjalo como está']);
+    R.push(['Después de un lote falla el sonido, la cámara o el volante','Se desactivó algo que no debía','Reactiva el lote con <code>pm enable</code> y reinicia. Si el radio no arranca, el último recurso es el restablecimiento de fábrica (borra tu configuración)']);
+    R.push(['No aparecen las Opciones de desarrollador','La unidad las oculta o pide una clave','Pon el reloj en hora; si sigue igual, pregunta al vendedor o revisa el manual del modelo']);
+  }
+  return { id:'problemas', t:'Si algo sale mal', nocheck:true, b:[ { table:{ head:['Ves esto','Qué pasa','Solución'], rows:R } } ] };
+}
+
+/* ---------- pantallas de aviso ---------- */
+var STOPS = {
+  'tv-other': { t:'Tu TV no usa Android', b:[
+    { p:'Samsung (Tizen), LG (webOS), Roku, Vizio y Hisense VIDAA no aceptan adb, así que esta guía no sirve para ellas.' },
+    { p:'Sí hay una forma de apagar el rastreo desde el control remoto. El proyecto CleanYourTV tiene una guía para eso: <a href="https://cleanyour.tv/not-android" target="_blank" rel="noopener">cleanyour.tv/not-android</a>. No necesitas computador.' },
+    { note:'info', tag:'¿Y si en realidad sí es Android?', html:'Algunas TVs de esas marcas venden modelos con Google TV. Si tu TV tiene la Play Store, vuelve atrás y elige "Google TV o Android TV".' } ] },
+  'tv-unknown': { t:'Cómo saber qué sistema tiene tu TV', b:[
+    { list:[ 'Si el menú de inicio dice <strong>Google TV</strong> o <strong>Android TV</strong>, o hay una tienda <strong>Google Play</strong>, es Android.',
+             'Si el menú es de Amazon, es <strong>Fire TV</strong>.',
+             'Si es de Samsung, LG o Roku, o el menú lo dibuja la marca sin Play Store, no es Android.',
+             'Mira en Ajustes → Sistema → Información, o busca en internet el modelo exacto (viene en la etiqueta de atrás) junto con las palabras "sistema operativo".' ] },
+    { muted:'Cuando lo sepas, vuelve atrás y elige la opción correcta.' } ] },
+  'car-phone': { t:'Con CarPlay o Android Auto casi no hay nada que limpiar', b:[
+    { p:'Si el radio solo muestra lo que viene del celular, no tiene apps propias que desactivar. Lo que sí puedes ordenar está en el celular:' },
+    { list:[ '<strong>iPhone:</strong> Ajustes → General → CarPlay → tu auto → Personalizar, para ordenar u ocultar apps.',
+             '<strong>Android:</strong> Ajustes → Dispositivos conectados → Preferencias de conexión → Android Auto, y ahí la opción para personalizar el inicio.' ] },
+    { muted:'Los nombres exactos cambian un poco con la versión del sistema. Si además tu auto trae un sistema propio, vuelve atrás y elige el tipo que corresponda.' } ] },
+  'car-unknown': { t:'Cómo saber qué radio tienes', b:[
+    { list:[ 'Si tiene una pantalla grande con Ajustes de Android, <strong>Play Store</strong> o se pueden instalar apps, y la compraste e instalaste después, es un <strong>radio Android</strong>.',
+             'Si el auto trae Google integrado de fábrica (Maps, Assistant y Play Store dentro de la pantalla), es <strong>Android Automotive</strong>.',
+             'Si solo muestra la radio y, al conectar el celular, CarPlay o Android Auto, es de <strong>solo CarPlay o Android Auto</strong>.' ] },
+    { muted:'Cuando lo sepas, vuelve atrás y elige la opción correcta.' } ] }
+};
+
+/* ---------- render ---------- */
+var app = document.getElementById('app'), pbar = document.getElementById('pbar');
+
+function header(){
+  var h = el('div', 'head');
+  h.appendChild(el('div', 'eyebrow', 'Guía interactiva <b>/ TV y radio de auto · Windows y Mac</b>'));
+  h.appendChild(el('h1', null, 'Limpia tu TV o tu radio de auto'));
+  h.appendChild(el('p', 'lead', 'Responde unas preguntas y recibe solo los pasos que necesitas, con los comandos de tu computador.'));
+  return h;
+}
+function setProgress(pct){ pbar.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+
+function renderQuestion(q){
+  var wrap = el('section', 'qcard');
+  var applicable = Q.filter(applies), answered = applicable.filter(function(x){ return x.id in S.A; }).length;
+  var n = applicable.indexOf(q) + 1;
+  wrap.appendChild(el('div', 'qmeta', 'Pregunta ' + n));
+  wrap.appendChild(el('h2', null, q.t));
+  if (q.h) wrap.appendChild(el('p', 'muted', q.h));
+  var opts = q.opts(S.A), box = el('div', 'opts'), multi = q.type === 'multi';
+  var sel = multi ? (S.A[q.id] ? S.A[q.id].slice() : []) : [S.A[q.id]];
+  var cont;
+  opts.forEach(function(o){
+    var b = el('button', 'opt' + (multi ? ' multi' : '')); b.type = 'button';
+    var on = sel.indexOf(o.v) > -1;
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.appendChild(el('span', 'mark', on ? '✓' : ''));
+    b.appendChild(el('span', 'ot', o.t));
+    if (o.s) b.appendChild(el('span', 'os', o.s));
+    b.addEventListener('click', function(){
+      if (!multi){ answer(q, o.v); return; }
+      var i = sel.indexOf(o.v); if (i > -1) sel.splice(i, 1); else sel.push(o.v);
+      var now = sel.indexOf(o.v) > -1; b.setAttribute('aria-pressed', now ? 'true' : 'false'); b.firstChild.textContent = now ? '✓' : '';
+      cont.disabled = sel.length < (q.min || 0);
+    });
+    box.appendChild(b);
+  });
+  wrap.appendChild(box);
+  var row = el('div', 'row');
+  if (S.hist.length){ var bk = el('button', 'btn', '← Atrás'); bk.type = 'button'; bk.addEventListener('click', back); row.appendChild(bk); }
+  if (multi){
+    cont = el('button', 'btn primary', 'Continuar'); cont.type = 'button'; cont.disabled = sel.length < (q.min || 0);
+    cont.addEventListener('click', function(){ answer(q, sel.slice()); });
+    row.appendChild(cont);
+  }
+  if (row.childNodes.length) wrap.appendChild(row);
+  setProgress(answered / Math.max(applicable.length, 1) * 100);
+  return wrap;
+}
+
+function renderChips(){
+  var sum = el('div', 'sum');
+  sum.appendChild(el('div', 'qmeta', 'Tus respuestas (toca una para cambiarla)'));
+  var chips = el('div', 'chips');
+  Q.forEach(function(q){
+    if (!applies(q) || !(q.id in S.A)) return;
+    var c = el('button', 'chip', chipText(q)); c.type = 'button';
+    c.addEventListener('click', function(){ gotoQ(q.id); });
+    chips.appendChild(c);
+  });
+  sum.appendChild(chips);
+  return sum;
+}
+
+function renderStop(){
+  var d = STOPS[stopKey()], wrap = el('section', 'qcard');
+  wrap.appendChild(el('h2', null, d.t));
+  d.b.forEach(function(b){ wrap.appendChild(mkBlock(b)); });
+  var row = el('div', 'row');
+  var bk = el('button', 'btn primary', '← Volver y cambiar la respuesta'); bk.type = 'button'; bk.addEventListener('click', back); row.appendChild(bk);
+  var rs = el('button', 'btn', 'Empezar de nuevo'); rs.type = 'button'; rs.addEventListener('click', restart); row.appendChild(rs);
+  wrap.appendChild(row);
+  setProgress(100);
+  return wrap;
+}
+
+function renderResult(){
+  var frag = document.createDocumentFragment();
+  var steps = S.A.device === 'tv' ? tvSteps(S.A) : carSteps(S.A);
+  var checkable = steps.filter(function(x){ return !x.nocheck; });
+  var sum = renderChips();
+  var meter = el('div', 'bar'), mspan = el('span'); meter.appendChild(mspan);
+  var cnt = el('div', 'qmeta', '');
+  sum.appendChild(cnt); sum.appendChild(meter);
+  var row = el('div', 'row');
+  var bk = el('button', 'btn', '← Atrás'); bk.type = 'button'; bk.addEventListener('click', back); row.appendChild(bk);
+  var rs = el('button', 'btn', 'Empezar de nuevo'); rs.type = 'button'; rs.addEventListener('click', restart); row.appendChild(rs);
+  sum.appendChild(row);
+  frag.appendChild(sum);
+
+  function refresh(){
+    var d = checkable.filter(function(x){ return S.done[x.id]; }).length;
+    cnt.textContent = 'Tu guía: ' + d + ' de ' + checkable.length + ' pasos hechos';
+    mspan.style.width = (d / Math.max(checkable.length, 1) * 100) + '%';
+    setProgress(d / Math.max(checkable.length, 1) * 100);
+  }
+
+  var cards = [];
+  steps.forEach(function(st, i){
+    var card = el('section', 'step' + (S.done[st.id] ? ' done' : '')); card.id = 'st-' + st.id;
+    var sh = el('div', 'sh'); sh.appendChild(el('div', 'num', String(i + 1))); sh.appendChild(el('h2', null, st.t)); card.appendChild(sh);
+    var sb = el('div', 'sb'); st.b.forEach(function(b){ sb.appendChild(mkBlock(b)); }); card.appendChild(sb);
+    if (!st.nocheck){
+      var lb = el('label', 'donelbl'), cb = el('input'); cb.type = 'checkbox'; cb.id = 'done-' + st.id; cb.checked = !!S.done[st.id];
+      lb.appendChild(cb); lb.appendChild(document.createTextNode('Paso hecho'));
+      cb.addEventListener('change', function(){
+        S.done[st.id] = cb.checked; card.classList.toggle('done', cb.checked); save(); refresh();
+        if (cb.checked){
+          var nx = cards[i + 1]; if (nx){ var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; nx.scrollIntoView({ behavior: rm ? 'auto' : 'smooth', block:'start' }); }
+        }
+      });
+      card.appendChild(lb);
+    }
+    cards.push(card); frag.appendChild(card);
+  });
+  refresh();
+  return frag;
+}
+
+function render(scroll){
+  app.textContent = '';
+  app.appendChild(header());
+  var v = S.view;
+  if (v !== 'STOP' && v !== 'DONE' && !qById(v)) v = S.view = nextView();
+  if (v === 'DONE' || (v !== 'STOP' && nextView() === 'DONE' && !qById(v))) { app.appendChild(renderResult()); }
+  else if (v === 'STOP') app.appendChild(renderStop());
+  else app.appendChild(renderQuestion(qById(v)));
+  if (scroll) window.scrollTo(0, 0);
+}
+render(false);
 })();
 </script>
 </body>
