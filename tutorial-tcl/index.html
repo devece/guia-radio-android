@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Instalar launcher en TV TCL sin depuración inalámbrica</title>
+<meta name="description" content="Tutorial paso a paso para instalar CleanYourTV en un TV TCL (Android TV) que no tiene depuración inalámbrica, usando ADB por red desde Windows.">
+<style>
+:root{
+  --bg:#0a1226; --surface:#111b35; --surface-2:#16234a; --line:#223059;
+  --fg:#eaf0fb; --muted:#9aa9c7; --accent:#4cc3ea; --accent-2:#5fd8b0; --on-accent:#06101f;
+  --warn:#f2b35c; --alert:#ff5a6e; --code-bg:#050a18; --code-fg:#cfe9ff;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f3f6fb; --surface:#ffffff; --surface-2:#e9f0fa; --line:#cfdaee;
+  --fg:#0b1736; --muted:#4c5f80; --accent:#0a74b8; --accent-2:#11806f; --on-accent:#ffffff;
+  --warn:#9a5f00; --alert:#c1001f; --code-bg:#0b1736; --code-fg:#e3f2ff; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#f3f6fb; --surface:#ffffff; --surface-2:#e9f0fa; --line:#cfdaee;
+  --fg:#0b1736; --muted:#4c5f80; --accent:#0a74b8; --accent-2:#11806f; --on-accent:#ffffff;
+  --warn:#9a5f00; --alert:#c1001f; --code-bg:#0b1736; --code-fg:#e3f2ff; color-scheme:light }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 var(--sans)}
+.progress{position:fixed;top:0;left:0;right:0;height:4px;z-index:5;background:var(--line)}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
+.wrap{max-width:820px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left)) 96px;display:grid;gap:22px}
+h1{font-size:clamp(1.7rem,5vw,2.4rem);line-height:1.15;margin:0;letter-spacing:-.02em}
+h2{font-size:1.2rem;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+.lead{color:var(--muted)}
+.wrap>*,.card>*,#steps>*{min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px}
+.card.done{border-color:var(--accent-2)}
+.card.locked{opacity:.45;pointer-events:none}
+.stepnum{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:700;margin-right:8px}
+.card.done .stepnum{background:var(--accent-2)}
+.head{display:flex;align-items:center}
+.warn{border-left:4px solid var(--warn);background:var(--surface-2);padding:10px 14px;border-radius:8px}
+.alert{border-left:4px solid var(--alert);background:var(--surface-2);padding:10px 14px;border-radius:8px}
+.ipbox{display:grid;gap:10px}
+.iprow{display:flex;gap:10px;flex-wrap:wrap}
+input[type=text]{flex:1 1 220px;min-width:0;font:600 1.2rem var(--mono);padding:12px 14px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--fg)}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+input.bad{border-color:var(--alert)}
+button{font:600 1rem var(--sans);cursor:pointer;border-radius:10px;border:0;padding:12px 18px;background:var(--accent);color:var(--on-accent)}
+button.ghost{background:var(--surface-2);color:var(--fg);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px}
+.err{color:var(--alert);min-height:1.4em;font-size:.95rem}
+.cmd{position:relative}
+.cmd .label{font-size:.88rem;color:var(--muted);margin-bottom:4px}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);font:.92rem/1.5 var(--mono);padding:14px 84px 14px 14px;border-radius:10px;overflow-x:auto;white-space:pre}
+.copy{position:absolute;right:8px;bottom:8px;padding:6px 12px;font-size:.85rem}
+ol,ul{margin:0;padding-left:1.3rem;display:grid;gap:4px}
+code{font-family:var(--mono);background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.92em}
+details{background:var(--surface-2);border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+details > *{margin-top:10px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.expected{color:var(--accent-2);font-size:.95rem}
+footer{color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><span id="bar"></span></div>
+
+<main class="wrap">
+  <header style="display:grid;gap:10px">
+    <h1>Instala el launcher en tu TV TCL<br>sin depuración inalámbrica</h1>
+    <p class="lead">Guía para Windows. Usamos <strong>ADB por red (puerto 5555)</strong>, que funciona aunque tu TV no tenga la opción «Depuración inalámbrica». Escribe la IP de tu TV una vez y todos los comandos se completan solos.</p>
+    <div class="alert"><strong>Importante:</strong> el instalador cambia la <em>pantalla de inicio</em> del TV y desactiva el launcher original. Hay un paso para restaurarlo; léelo antes de instalar (paso 9).</div>
+  </header>
+
+  <section class="card" id="ipcard" aria-labelledby="iph">
+    <h2 id="iph">Primero: la IP de tu TV</h2>
+    <div class="ipbox">
+      <p>En el TV: <strong>Ajustes → Red e Internet →</strong> tu WiFi. Verás algo como <code>192.168.1.101</code>. El PC y el TV deben estar en la <strong>misma red WiFi</strong>.</p>
+      <form class="iprow" id="ipform" novalidate>
+        <label for="ip" class="lead" style="flex-basis:100%">IP del TV</label>
+        <input type="text" id="ip" inputmode="decimal" autocomplete="off" placeholder="192.168.1.101" aria-describedby="iperr">
+        <button type="submit">Guardar IP</button>
+      </form>
+      <div class="err" id="iperr" role="alert"></div>
+    </div>
+  </section>
+
+  <div id="steps" style="display:grid;gap:22px"></div>
+
+  <footer>
+    Se apoya en el proyecto abierto <a href="https://github.com/Gathin23/cleanyourtv" rel="noopener">CleanYourTV</a>. Tu avance y tu IP se guardan solo en este navegador. Los comandos se ejecutan en tu PC y en tu TV, no en esta página.
+  </footer>
+</main>
+
+<script>
+(function(){
+  var KEY_IP='tcl-tutorial-ip', KEY_DONE='tcl-tutorial-done';
+  var ip='', done={};
+  function load(k,fallback){ try{ var v=localStorage.getItem(k); return v===null?fallback:v; }catch(e){ return fallback; } }
+  function save(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  ip = load(KEY_IP,'');
+  try{ done = JSON.parse(load(KEY_DONE,'{}'))||{}; }catch(e){ done={}; }
+
+  var JDK='$env:JAVA_HOME = (Get-ChildItem \'C:\\Program Files\\Eclipse Adoptium\' -Directory | Where-Object Name -like \'jdk-17*\' | Select-Object -First 1).FullName';
+
+  var steps=[
+   {t:'Activa las opciones de desarrollador en el TV',
+    html:'<ol><li>En el TV: <strong>Ajustes → Preferencias del dispositivo → Acerca de</strong>.</li><li>Pulsa <strong>7 veces</strong> sobre «Compilación» (Build) hasta ver «Ahora eres desarrollador».</li></ol>'},
+   {t:'Activa la depuración USB (no la inalámbrica)',
+    html:'<ol><li>Vuelve a <strong>Preferencias del dispositivo → Opciones para desarrolladores</strong>.</li><li>Activa <strong>Depuración USB</strong>. En algunos TCL se llama «Depuración ADB» o «Depuración de red».</li></ol><p class="lead">No necesitas «Depuración inalámbrica» ni código de emparejamiento.</p>'},
+   {t:'Instala Git, Python y el JDK 17',
+    html:'<p>Abre <strong>PowerShell</strong> en el PC e instala las herramientas con winget (viene en Windows 10/11):</p>',
+    cmds:[{l:'Git, Python y JDK 17 (Temurin)',c:'winget install Git.Git\nwinget install Python.Python.3.12\nwinget install EclipseAdoptium.Temurin.17.JDK'}],
+    after:'<div class="warn"><strong>Usa JDK 17.</strong> El JDK que trae Android Studio es muy nuevo (Java 25) y Gradle falla con «Unsupported class file major version 69».</div><p>Cierra y vuelve a abrir PowerShell al terminar para que reconozca los programas nuevos.</p>'},
+   {t:'Instala Android Studio y descarga el SDK',
+    html:'<ol><li>Descarga Android Studio desde <a href="https://developer.android.com/studio" rel="noopener">developer.android.com/studio</a> e instálalo <strong>una sola vez</strong> (si queda dos veces, una carpeta puede quedar dañada).</li><li>Ábrelo. En la pantalla de bienvenida: <strong>More Actions → SDK Manager</strong>.</li><li>Pulsa <strong>Apply</strong> para crear la carpeta del SDK, marca la última <em>SDK Platform</em> y en <em>SDK Tools</em> marca <strong>Build-Tools</strong> y <strong>Platform-Tools</strong>. Acepta las licencias y espera la descarga (varios GB).</li></ol><p>Comprueba que quedó:</p>',
+    cmds:[{l:'Debe responder True',c:'Test-Path "$env:LOCALAPPDATA\\Android\\Sdk"'}]},
+   {t:'Descarga el proyecto CleanYourTV',
+    html:'<p>Clona el proyecto en tu carpeta de usuario:</p>',
+    cmds:[{l:'Clonar y entrar',c:'cd $HOME\ngit clone https://github.com/Gathin23/cleanyourtv.git\ncd cleanyourtv'}],
+    after:'<p class="lead">Si ya lo tienes descargado, solo haz <code>cd</code> a su carpeta.</p>'},
+   {t:'Prepara el entorno de Python (solo si falta)',
+    html:'<p>El instalador usa <code>tools\\venv</code> para hablar con el TV. Si esa carpeta no existe, créala:</p>',
+    cmds:[{l:'Crear el entorno',c:'cd $HOME\\cleanyourtv\npython -m venv tools\\venv\ntools\\venv\\Scripts\\pip install -r tools\\requirements.txt'}],
+    after:'<p class="lead">Si <code>tools\\venv</code> ya existe, salta este paso.</p>'},
+   {t:'Conecta el PC con el TV por ADB (puerto 5555)',
+    html:'<p>Con el TV encendido y en la misma WiFi:</p>',
+    cmds:[{l:'Conectar',c:'adb connect {IP}:5555'},{l:'Comprobar',c:'adb devices'}],
+    after:'<p class="expected">Debe aparecer <code>{IP}:5555   device</code>.</p><ul><li>Si sale <code>unauthorized</code>: mira la pantalla del TV, acepta «¿Permitir depuración USB?» y marca «Permitir siempre». Luego repite <code>adb devices</code>.</li></ul><details><summary>Si sale «connection refused» o «no se puede conectar»</summary><ul><li>Confirma que la IP es la actual del TV (puede cambiar si reinicias el router).</li><li>Reinicia el servidor ADB y reintenta:</li></ul><pre>adb kill-server\nadb connect {IP}:5555</pre><ul><li>Apaga y enciende la depuración USB en el TV y vuelve a intentarlo.</li><li>Si el TV nunca abre el puerto 5555, este método no sirve en tu modelo. Mira <code>tools\\native-adb.md</code> dentro del proyecto.</li></ul></details>'},
+   {t:'Apunta a las herramientas correctas (JDK 17)',
+    html:'<p>En <strong>la misma ventana</strong> de PowerShell donde vas a instalar, indica qué JDK usar:</p>',
+    cmds:[{l:'Definir JAVA_HOME',c:JDK},{l:'Comprobar: debe decir version "17..."',c:'& "$env:JAVA_HOME\\bin\\java.exe" -version'}],
+    after:'<p class="lead">Esta variable solo vale para esta ventana. Si la cierras, repite este paso.</p>'},
+   {t:'Lee cómo restaurar el launcher original',
+    html:'<div class="alert">Antes de instalar, ten claro cómo volver atrás.</div>',
+    cmds:[{l:'Leer la guía de restauración',c:'cd $HOME\\cleanyourtv\nGet-Content docs\\restore.md'}],
+    after:'<p>El comando de restauración es:</p><pre>cd $HOME\\cleanyourtv\\tools\npowershell -ExecutionPolicy Bypass -File .\\restore.ps1 -TvHost {IP}</pre>'},
+   {t:'Compila e instala el launcher',
+    html:'<p>Esto compila la app (la primera vez tarda varios minutos) y la instala en el TV como pantalla de inicio:</p>',
+    cmds:[{l:'Instalar',c:'cd $HOME\\cleanyourtv\\launcher\npowershell -ExecutionPolicy Bypass -File .\\build-and-install.ps1 -TvHost {IP}'}],
+    after:'<p class="expected">Al final debe decir «Home now resolves to com.gathin.tvhome/.MainActivity» e «Installed». Pulsa <strong>Home</strong> en el control remoto.</p><details><summary>Si el botón Home no abre el launcher o el botón Input no responde</summary><p>Repite la instalación añadiendo la opción que corresponda a tu control:</p><pre>powershell -ExecutionPolicy Bypass -File .\\build-and-install.ps1 -TvHost {IP} -HomeKeyService -InputKeyService</pre></details><details><summary>Errores frecuentes</summary><ul><li><code>Set JAVA_HOME to a JDK 17+</code> o <code>jvm.cfg</code>: repite el paso 8.</li><li><code>Unsupported class file major version 69</code>: estás usando Java 25; repite el paso 8 con JDK 17.</li><li><code>SDK location not found</code>: completa el paso 4.</li><li><code>could not ask the TV</code>: repite el paso 7 y acepta el aviso en el TV.</li></ul></details>'},
+   {t:'Cambia el fondo con un tema',
+    html:'<p>El proyecto trae temas: <code>aurora</code>, <code>cinematic</code>, <code>default</code>, <code>glass</code>, <code>nature-calm</code>, <code>retro</code>, <code>scenes</code>, <code>sweden</code> y más. Se aplican con la <strong>ruta de la carpeta</strong> del tema:</p>',
+    cmds:[{l:'Aplicar el tema aurora',c:'cd $HOME\\cleanyourtv\npowershell -ExecutionPolicy Bypass -File .\\tools\\theme.ps1 -TvHost {IP} themes\\aurora'},{l:'Volver al tema original',c:'powershell -ExecutionPolicy Bypass -File .\\tools\\theme.ps1 -TvHost {IP} themes\\default'}],
+    after:'<details><summary>Usar tus propias fotos</summary><ol><li>Copia un tema como plantilla.</li><li>Pon tus fotos dentro con los nombres que indique <code>themes\\CREATE_A_THEME.md</code>.</li><li>Aplícalo con la misma ruta.</li></ol><pre>Copy-Item -Recurse themes\\default themes\\mis-fotos\npowershell -ExecutionPolicy Bypass -File .\\tools\\theme.ps1 -TvHost {IP} themes\\mis-fotos</pre></details>'},
+   {t:'Si algo sale mal: vuelve al launcher original',
+    html:'<p>Restaura la pantalla de inicio del fabricante:</p>',
+    cmds:[{l:'Restaurar',c:'cd $HOME\\cleanyourtv\\tools\npowershell -ExecutionPolicy Bypass -File .\\restore.ps1 -TvHost {IP}'}]}
+  ];
+
+  var IPRE=/^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+  var stepsEl=document.getElementById('steps'), bar=document.getElementById('bar');
+  var ipInput=document.getElementById('ip'), ipErr=document.getElementById('iperr');
+  ipInput.value=ip;
+
+  function fill(s){ return s.split('{IP}').join(ip||'IP_DEL_TV'); }
+
+  function makeCmd(cm){
+    var d=document.createElement('div'); d.className='cmd';
+    var l=document.createElement('div'); l.className='label'; l.textContent=cm.l;
+    var pre=document.createElement('pre'); pre.textContent=fill(cm.c);
+    var b=document.createElement('button'); b.type='button'; b.className='ghost copy'; b.textContent='Copiar';
+    b.addEventListener('click',function(){
+      var text=pre.textContent;
+      function ok(){ b.textContent='¡Copiado!'; setTimeout(function(){ b.textContent='Copiar'; },1400); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok,function(){ fallback(text,ok); }); }
+      else fallback(text,ok);
+    });
+    d.appendChild(l); d.appendChild(pre); d.appendChild(b); return d;
+  }
+  function fallback(text,ok){
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); ok(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  function render(){
+    stepsEl.textContent='';
+    var hasIp=IPRE.test(ip), count=0;
+    steps.forEach(function(s,i){
+      if(done[i]) count++;
+      var sec=document.createElement('section'); sec.className='card'+(done[i]?' done':'')+(!hasIp&&needsIp(s)?' locked':'');
+      var head=document.createElement('div'); head.className='head';
+      var n=document.createElement('span'); n.className='stepnum'; n.textContent=done[i]?'✓':String(i+1);
+      var h=document.createElement('h2'); h.textContent=s.t;
+      head.appendChild(n); head.appendChild(h); sec.appendChild(head);
+      if(s.html){ var d=document.createElement('div'); d.innerHTML=fill(s.html); sec.appendChild(d); }
+      (s.cmds||[]).forEach(function(cm){ sec.appendChild(makeCmd(cm)); });
+      if(s.after){ var a=document.createElement('div'); a.style.display='grid'; a.style.gap='10px'; a.innerHTML=fill(s.after); sec.appendChild(a); }
+      var act=document.createElement('div'); act.className='actions';
+      var b=document.createElement('button'); b.type='button'; b.className=done[i]?'ghost':''; b.textContent=done[i]?'Marcar como pendiente':'Listo, siguiente';
+      b.addEventListener('click',function(){
+        done[i]=!done[i]; save(KEY_DONE,JSON.stringify(done)); render();
+        if(done[i]){ var nx=stepsEl.children[i+1]; if(nx) nx.scrollIntoView({behavior:'smooth',block:'start'}); }
+      });
+      act.appendChild(b); sec.appendChild(act);
+      stepsEl.appendChild(sec);
+    });
+    bar.style.width=Math.round(count/steps.length*100)+'%';
+  }
+  function needsIp(s){ return /\{IP\}/.test((s.html||'')+(s.after||'')+JSON.stringify(s.cmds||[])); }
+
+  document.getElementById('ipform').addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=ipInput.value.trim();
+    if(!IPRE.test(v)){ ipInput.classList.add('bad'); ipErr.textContent='Escribe una IP válida, por ejemplo 192.168.1.101'; return; }
+    ipInput.classList.remove('bad'); ipErr.textContent='';
+    ip=v; save(KEY_IP,ip); render();
+    stepsEl.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  render();
+})();
+</script>
+</body>
+</html>
