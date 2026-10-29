@@ -219,15 +219,20 @@ td code{font-size:.85em}
 var KEY = 'limpieza-tv-radio-v1';
 var IP = '192.168.1.50';   /* valores genéricos: se reemplazan por los reales del usuario */
 var CODE = '482913';
+var PPORT = '37145';   /* puerto del cuadro "Vincular con código" */
+var CPORT = '41827';   /* puerto de "Dirección IP y puerto" */
 var KEY_D = 'limpieza-tv-radio-datos-v1';
-var D = { ip:'', code:'' };
-try { var rd = JSON.parse(localStorage.getItem(KEY_D) || 'null'); if (rd && typeof rd === 'object'){ D.ip = String(rd.ip || ''); D.code = String(rd.code || ''); } } catch (e) {}
+var D = { ip:'', code:'', pport:'', cport:'' };
+try { var rd = JSON.parse(localStorage.getItem(KEY_D) || 'null'); if (rd && typeof rd === 'object'){ D.ip = String(rd.ip || ''); D.code = String(rd.code || ''); D.pport = String(rd.pport || ''); D.cport = String(rd.cport || ''); } } catch (e) {}
 function saveD(){ try { localStorage.setItem(KEY_D, JSON.stringify(D)); } catch (e) {} }
 function okIp(v){ var m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(v); return !!m && m.slice(1).every(function(x){ return +x <= 255; }); }
 function okCode(v){ return /^\d{6}$/.test(v); }
 function curIp(){ return okIp(D.ip) ? D.ip : IP; }
+function okPort(v){ return /^\d{4,5}$/.test(v) && +v >= 1024 && +v <= 65535; }
 function curCode(){ return okCode(D.code) ? D.code : CODE; }
-function fill(t){ return t.split(IP).join(curIp()).split(CODE).join(curCode()); }
+function curPP(){ return okPort(D.pport) ? D.pport : PPORT; }
+function curCP(){ return okPort(D.cport) ? D.cport : CPORT; }
+function fill(t){ return t.split(IP).join(curIp()).split(CODE).join(curCode()).split(PPORT).join(curPP()).split(CPORT).join(curCP()); }
 var liveCmds = [], liveSpans = [];
 
 /* ---------- helpers ---------- */
@@ -431,14 +436,14 @@ function prepStep(a, o){
 
 function pairBlocks(a, withPort){
   var b = [];
-  b.push({ p:'En el equipo: Opciones de desarrollador → Depuración inalámbrica → <strong>Vincular dispositivo con código</strong>. Aparecen un código de 6 números y una dirección con puerto. Deja el cuadro abierto. Si ya escribiste tus datos arriba (IP y código), los comandos de abajo los usan; si no, verás valores de ejemplo (IP <code>' + IP + '</code>, código <code>' + CODE + '</code>).' });
-  b.push({ cmd:'adb pair ' + IP + ':37145 ' + CODE });
+  b.push({ p:'En el equipo: Opciones de desarrollador → Depuración inalámbrica → <strong>Vincular dispositivo con código</strong>. Aparecen un código de 6 números y una dirección con puerto. Deja el cuadro abierto. Si ya escribiste tus datos arriba (IP, código y puertos), los comandos de abajo los usan; si no, verás valores de ejemplo (IP <code>' + IP + '</code>, código <code>' + CODE + '</code>, puertos <code>' + PPORT + '</code> y <code>' + CPORT + '</code>).' });
+  b.push({ cmd:'adb pair ' + IP + ':' + PPORT + ' ' + CODE });
   b.push({ muted:'Respuesta esperada: "Successfully paired". Solo se hace una vez.' });
   b.push({ p:'Cierra el cuadro. En la pantalla de Depuración inalámbrica aparece "Dirección IP y puerto": ese puerto es <strong>distinto</strong> al del cuadro.' });
-  b.push({ cmd:'adb connect ' + IP + ':41827' });
+  b.push({ cmd:'adb connect ' + IP + ':' + CPORT });
   if (withPort){
     b.push({ p:'El puerto inalámbrico cambia cada vez que el equipo se reinicia y las herramientas usan siempre el 5555. Usa la dirección anterior y luego la misma IP terminando en 5555.' });
-    b.push({ cmd:'adb -s ' + IP + ':41827 tcpip 5555\nadb connect ' + IP + ':5555\nadb devices' });
+    b.push({ cmd:'adb -s ' + IP + ':' + CPORT + ' tcpip 5555\nadb connect ' + IP + ':5555\nadb devices' });
     b.push({ muted:'Debe aparecer tu IP con :5555 y la palabra "device". Ver dos líneas es normal: es el mismo equipo por dos caminos.' });
   } else {
     b.push({ cmd:'adb devices' });
@@ -902,6 +907,8 @@ function renderDatos(){
   }
   g.appendChild(field('IP del equipo', 'Ejemplo: ' + IP + '. Está en la pantalla de Depuración inalámbrica o en Acerca de → Red.', 'ip', okIp, IP, 'decimal'));
   g.appendChild(field('Código de vinculación', 'Los 6 números del cuadro "Vincular con código". Si ya vinculaste, déjalo vacío.', 'code', okCode, CODE, 'numeric'));
+  g.appendChild(field('Puerto del cuadro de vinculación', 'El que aparece junto a la IP en el cuadro "Vincular con código". Ejemplo: ' + PPORT + '.', 'pport', okPort, PPORT, 'numeric'));
+  g.appendChild(field('Puerto de conexión', 'El de "Dirección IP y puerto" en la pantalla principal de Depuración inalámbrica (distinto al anterior). Ejemplo: ' + CPORT + '.', 'cport', okPort, CPORT, 'numeric'));
   box.appendChild(g);
   return box;
 }
