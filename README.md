@@ -6,6 +6,8 @@ Asistente interactivo que, según las respuestas, arma la guía paso a paso para
 - El avance y las respuestas de cada visitante se guardan solo en su navegador (localStorage).
 - Los comandos de TV se apoyan en el proyecto abierto [CleanYourTV](https://github.com/Gathin23/cleanyourtv). Los de radio de auto usan adb estándar.
 
+- Tutorial para TV TCL sin depuración inalámbrica (ADB por red, pide la IP y completa los comandos): `tutorial-tcl/index.html`, publicado en `/tutorial-tcl/`.
+
 ## Despliegue
 
 Proyecto Vercel `guia-radio-android` (sin framework, sin build). Cada cambio en `main` se publica solo.
