@@ -158,6 +158,16 @@ ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
 .mini.car .fm{position:absolute;left:6%;right:6%;bottom:9%;height:3px;border-radius:2px;background:var(--ill-frame)}
 .mini.car .fm b{display:block;width:62%;height:3px;border-radius:2px;background:var(--amber)}
 .hint{color:var(--muted);font-size:15px}
+.datos{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.datos-g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.fld{display:grid;gap:6px}
+.fl{font-weight:600;font-size:15px}
+.fld input{font:inherit;font-family:var(--mono);font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--fg);min-width:0}
+.fld input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.fld.ok input{border-color:var(--accent)}
+.fld.bad input{border-color:var(--warn)}
+.fh{color:var(--muted);font-size:13px}
+.ipv{font-family:var(--mono)}
 
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{border:1px solid var(--line-2);background:var(--surface-2);color:var(--fg);border-radius:999px;padding:5px 14px;font:inherit;font-size:14px;cursor:pointer}
@@ -207,12 +217,29 @@ td code{font-size:.85em}
 (function(){
 'use strict';
 var KEY = 'limpieza-tv-radio-v1';
-var IP = '192.168.1.50';
+var IP = '192.168.1.50';   /* valores genéricos: se reemplazan por los reales del usuario */
+var CODE = '482913';
+var PPORT = '37145';   /* puerto del cuadro "Vincular con código" */
+var CPORT = '41827';   /* puerto de "Dirección IP y puerto" */
+var KEY_D = 'limpieza-tv-radio-datos-v1';
+var D = { ip:'', code:'', pport:'', cport:'' };
+try { var rd = JSON.parse(localStorage.getItem(KEY_D) || 'null'); if (rd && typeof rd === 'object'){ D.ip = String(rd.ip || ''); D.code = String(rd.code || ''); D.pport = String(rd.pport || ''); D.cport = String(rd.cport || ''); } } catch (e) {}
+function saveD(){ try { localStorage.setItem(KEY_D, JSON.stringify(D)); } catch (e) {} }
+function okIp(v){ var m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(v); return !!m && m.slice(1).every(function(x){ return +x <= 255; }); }
+function okCode(v){ return /^\d{6}$/.test(v); }
+function curIp(){ return okIp(D.ip) ? D.ip : IP; }
+function okPort(v){ return /^\d{4,5}$/.test(v) && +v >= 1024 && +v <= 65535; }
+function curCode(){ return okCode(D.code) ? D.code : CODE; }
+function curPP(){ return okPort(D.pport) ? D.pport : PPORT; }
+function curCP(){ return okPort(D.cport) ? D.cport : CPORT; }
+function fill(t){ return t.split(IP).join(curIp()).split(CODE).join(curCode()).split(PPORT).join(curPP()).split(CPORT).join(curCP()); }
+var liveCmds = [], liveSpans = [];
 
 /* ---------- helpers ---------- */
 function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
-function mkCmd(text){
-  var d = el('div', 'cmd'), pre = el('pre'), b = el('button'); pre.textContent = text;
+function mkCmd(raw){
+  var d = el('div', 'cmd'), pre = el('pre'), b = el('button'), text = fill(raw); pre.textContent = text;
+  liveCmds.push(function(){ text = fill(raw); pre.textContent = text; });
   b.type = 'button'; b.textContent = 'Copiar'; b.setAttribute('aria-label', 'Copiar comando');
   b.addEventListener('click', function(){
     function selectIt(){ var r = document.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Seleccionado'; }
@@ -221,8 +248,11 @@ function mkCmd(text){
   });
   d.appendChild(pre); d.appendChild(b); return d;
 }
+function liveHtml(h){
+  return h.split(IP).join('<span class="ipv" data-k="ip">' + IP + '</span>');
+}
 function mkBlock(b){
-  if (b.p) return el('p', null, b.p);
+  if (b.p){ var pp = el('p', null, liveHtml(b.p)); liveSpans.push(pp); return pp; }
   if (b.muted) return el('p', 'muted', b.muted);
   if (b.h) return el('h3', null, b.h);
   if (b.cmd) return mkCmd(b.cmd);
@@ -406,14 +436,14 @@ function prepStep(a, o){
 
 function pairBlocks(a, withPort){
   var b = [];
-  b.push({ p:'En el equipo: Opciones de desarrollador → Depuración inalámbrica → <strong>Vincular dispositivo con código</strong>. Aparecen un código de 6 números y una dirección con puerto. Deja el cuadro abierto. En los ejemplos la IP es <code>' + IP + '</code>; usa los números de <strong>tu</strong> pantalla.' });
-  b.push({ cmd:'adb pair ' + IP + ':37145 482913' });
+  b.push({ p:'En el equipo: Opciones de desarrollador → Depuración inalámbrica → <strong>Vincular dispositivo con código</strong>. Aparecen un código de 6 números y una dirección con puerto. Deja el cuadro abierto. Si ya escribiste tus datos arriba (IP, código y puertos), los comandos de abajo los usan; si no, verás valores de ejemplo (IP <code>' + IP + '</code>, código <code>' + CODE + '</code>, puertos <code>' + PPORT + '</code> y <code>' + CPORT + '</code>).' });
+  b.push({ cmd:'adb pair ' + IP + ':' + PPORT + ' ' + CODE });
   b.push({ muted:'Respuesta esperada: "Successfully paired". Solo se hace una vez.' });
   b.push({ p:'Cierra el cuadro. En la pantalla de Depuración inalámbrica aparece "Dirección IP y puerto": ese puerto es <strong>distinto</strong> al del cuadro.' });
-  b.push({ cmd:'adb connect ' + IP + ':41827' });
+  b.push({ cmd:'adb connect ' + IP + ':' + CPORT });
   if (withPort){
     b.push({ p:'El puerto inalámbrico cambia cada vez que el equipo se reinicia y las herramientas usan siempre el 5555. Usa la dirección anterior y luego la misma IP terminando en 5555.' });
-    b.push({ cmd:'adb -s ' + IP + ':41827 tcpip 5555\nadb connect ' + IP + ':5555\nadb devices' });
+    b.push({ cmd:'adb -s ' + IP + ':' + CPORT + ' tcpip 5555\nadb connect ' + IP + ':5555\nadb devices' });
     b.push({ muted:'Debe aparecer tu IP con :5555 y la palabra "device". Ver dos líneas es normal: es el mismo equipo por dos caminos.' });
   } else {
     b.push({ cmd:'adb devices' });
@@ -851,6 +881,37 @@ function renderQuestion(q){
   return wrap;
 }
 
+function refreshLive(){
+  liveCmds.forEach(function(f){ f(); });
+  liveSpans.forEach(function(p){
+    p.querySelectorAll('.ipv').forEach(function(x){ x.textContent = curIp(); });
+  });
+}
+function renderDatos(){
+  var box = el('div', 'datos');
+  box.appendChild(el('div', 'qmeta', 'Tus datos (opcional): los comandos se rellenan solos'));
+  var g = el('div', 'datos-g');
+  function field(label, hint, key, valid, ph, mode){
+    var l = el('label', 'fld'), t = el('span', 'fl', label), i = el('input'), m = el('span', 'fh', hint);
+    i.type = 'text'; i.value = D[key]; i.placeholder = ph; i.inputMode = mode; i.autocomplete = 'off'; i.spellcheck = false;
+    function upd(){
+      D[key] = i.value.trim(); saveD();
+      var v = D[key];
+      l.className = 'fld' + (v === '' ? '' : (valid(v) ? ' ok' : ' bad'));
+      m.textContent = v === '' ? hint : (valid(v) ? 'Listo: se usa en los comandos' : 'Formato no válido: se usa el ejemplo');
+      refreshLive();
+    }
+    i.addEventListener('input', upd);
+    l.appendChild(t); l.appendChild(i); l.appendChild(m); upd();
+    return l;
+  }
+  g.appendChild(field('IP del equipo', 'Ejemplo: ' + IP + '. Está en la pantalla de Depuración inalámbrica o en Acerca de → Red.', 'ip', okIp, IP, 'decimal'));
+  g.appendChild(field('Código de vinculación', 'Los 6 números del cuadro "Vincular con código". Si ya vinculaste, déjalo vacío.', 'code', okCode, CODE, 'numeric'));
+  g.appendChild(field('Puerto del cuadro de vinculación', 'El que aparece junto a la IP en el cuadro "Vincular con código". Ejemplo: ' + PPORT + '.', 'pport', okPort, PPORT, 'numeric'));
+  g.appendChild(field('Puerto de conexión', 'El de "Dirección IP y puerto" en la pantalla principal de Depuración inalámbrica (distinto al anterior). Ejemplo: ' + CPORT + '.', 'cport', okPort, CPORT, 'numeric'));
+  box.appendChild(g);
+  return box;
+}
 function renderChips(){
   var sum = el('div', 'sum');
   sum.appendChild(el('div', 'qmeta', 'Tus respuestas (toca una para cambiarla)'));
@@ -882,6 +943,7 @@ function renderResult(){
   var steps = (S.A.device === 'tv' || S.A.device === 'box') ? tvSteps(normBox(S.A)) : carSteps(S.A);
   var checkable = steps.filter(function(x){ return !x.nocheck; });
   var sum = renderChips();
+  sum.appendChild(renderDatos());
   var meter = el('div', 'bar'), mspan = el('span'); meter.appendChild(mspan);
   var cnt = el('div', 'qmeta', '');
   sum.appendChild(cnt); sum.appendChild(meter);
@@ -922,6 +984,7 @@ function renderResult(){
 
 function render(scroll){
   app.textContent = '';
+  liveCmds = []; liveSpans = [];
   var v = S.view;
   if (v !== 'STOP' && v !== 'DONE' && !qById(v)) v = S.view = nextView();
   var onCover = !S.started && !Object.keys(S.A).length && v === 'device';
